@@ -9,10 +9,12 @@ Vitron tries to address two common gaps with MLLMs (multimodal LLMs):
 1. MLLMs are generalist e.g., they have coarse-grain instance-level understanding.
 2. Lack of unified support for both images and videos and their coverage.
 
-
 <p align="center">
-    <img src="imgs/vitron-arch.png" alt="VITRON Architecture">
+    <img src="imgs/vitron-arch.png" alt="VITRON Architecture" width="600" height="350">
 </p>
+
+
+
 
 
 
