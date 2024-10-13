@@ -1,4 +1,22 @@
 
+
+## NExT-GPT: Any-to-Any Multimodal LLM
+
+[Code](https://github.com/NExT-GPT/NExT-GPT) | [Paper](https://arxiv.org/pdf/2309.05519)
+
+### Summary:
+
+Multimodal Large Language Models (MM-LLMs) have advanced significantly, they often only understand multimodal inputs without generating multimodal outputs. NExT-GPT addresses this by creating an end-to-end system capable of any-to-any modality interactions (multimodal in outputs and inputs). It connects an LLM with multimodal adaptors and diffusion decoders, allowing it to handle text, images, videos, and audio. Utilizing well-trained encoders and decoders, NExT-GPT requires minimal parameter tuning, making it cost-effective and easily expandable. . This research demonstrates the potential for AI to model universal modalities, advancing human-like AI development.
+
+### Architecture
+
+<p align="center">
+    <img src="imgs/next-gpt.png" alt="VITRON Architecture" width="600" height="350">
+</p>
+
+
+
+
 ## VITRON: A Unified Pixel-level Vision LLM for Understanding, Generating, Segmenting, Editing
 
 [Code](https://vitron-llm.github.io/) | [Paper](https://haofei.vip/downloads/papers/Skywork_Vitron_2024.pdf)
@@ -36,22 +54,17 @@ In VITRON, the LLM is Vicuna (7B, version 1.5) to process inputs from both langu
 
 #### BackEnd Models
 
-To enable our MLLM with various visual task abilities, we integrate an array of singleton vision
-specialists into LLM. For image generation and editing, we integrate the diffusion-based model
-GLIGEN [57]. For image and video segmentation, we opt for SEEM [139]. For video generation,
-ZeroScope [8] and I2VGen-XL [131] are utilized for text-to-video and image-to-video tasks, respectively. Lastly, for video editing functionality, we incorporate StableVideo [9]. The text instructions
-from LLM first determine which task module to invoke; simultaneously, feature embeddings are fed
-5
-into the corresponding module’s feature encoder to assist with task execution. Specifically, we design
-a structured invocation template, including 1) Module name, 2) Invocation command, and 3) Region
-(optional) specifying a fine-grained vision feature needed for certain tasks. The feature embeddings
-include both task-specific features and task-invariant fine-grained features. The purpose of this design
-is to achieve feature decoupling, during which we aim to have the task-invariant fine-grained features
-shared as widely as possible among all tasks to facilitate synergy between different tasks.
+To enable our MLLM with various visual task abilities, we integrate several specialized vision models into the LLM. For image generation and editing, we use the diffusion-based model GLIGEN. For image and video segmentation, we employ SEEM. For video generation, ZeroScope and I2VGen-XL are used for text-to-video and image-to-video tasks, respectively. For video editing, we incorporate StableVideo. The LLM's text instructions determine which task module to invoke, while feature embeddings are fed into the corresponding module’s feature encoder to assist with task execution. We design a structured invocation template that includes
+1. Module name
+2. Invocation command
+3. An optional region specifying a fine-grained vision feature needed for certain tasks.
 
+This design aims to achieve feature decoupling, sharing task-invariant fine-grained features among all tasks to facilitate synergy.
 
+### Training
 
-
+VITRON framework, train the model with three stages of targets. First, it endows model with basic multimodal capabilities, i.e., comprehension and generation. Then, we engage in
+fine-grained vision grounding instruction tuning to further enhance the model’s pixel-level perception abilities. Finally, we carry out cross-task synergy learning, maximizing the shared fine-grained features among all tasks.
 
 
 
