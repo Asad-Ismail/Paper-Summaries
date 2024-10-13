@@ -15,9 +15,52 @@ Multimodal Large Language Models (MM-LLMs) have advanced significantly, they oft
 </p>
 
 
+### Encoders
+1.  Multimodal Encoding Stage
+
+Leverage existing high-performance models to encode inputs from various modalities. Utilize ImageBind, a unified encoder across six modalities. Map different input representations into language-like representations via a linear projection layer, making them comprehensible to the LLM.
 
 
-### VITRON: A Unified Pixel-level Vision LLM for Understanding, Generating, Segmenting, Editing
+#### ImageBind
+
+ImageBind learns a joint embedding across six different modalities - images, text, audio, depth, thermal, and IMU data. It enables novel emergent applications ‘out-of-the-box’ including cross-modal retrieval, composing modalities with arithmetic, cross-modal detection and generation. [ImageBind Code](https://github.com/facebookresearch/ImageBind)
+
+
+2.  LLM Understanding and Reasoning Stage
+
+Employ Vicuna as the core agent of NExT-GPT. The LLM takes input representations from different modalities, performing semantic understanding and reasoning. It outputs:
+1. Textual responses.
+2. Signal tokens for each modality, serving as instructions for the decoding layers to generate multimodal content.
+
+3. Multimodal Generation Stage
+
+Transformer-based output projection layers map signal token representations into forms understandable by multimodal decoders. Use off-the-shelf latent conditioned diffusion models for different modal generations:
+- Stable Diffusion (SD) for image synthesis.
+- Zeroscope for video synthesis.
+- AudioLDM for audio synthesis.
+
+### Project Layers to train for alignement
+
+<p align="center">
+    <img src="imgs/next-gpt-projections.png" alt="VITRON Architecture" width="500" height="150">
+</p>
+
+### Alignment
+
+Two kind of aligment
+1. Encoding Alignment
+2. Decoding aliggment
+
+<p align="center">
+    <img src="imgs/next-gpt-alignement.png" alt="VITRON Architecture" width="600" height="350">
+</p>
+
+
+
+
+
+
+## VITRON: A Unified Pixel-level Vision LLM for Understanding, Generating, Segmenting, Editing
 
 [Code](https://vitron-llm.github.io/) | [Paper](https://haofei.vip/downloads/papers/Skywork_Vitron_2024.pdf)
 
