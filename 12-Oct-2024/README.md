@@ -11,13 +11,13 @@ Multimodal Large Language Models (MM-LLMs) have advanced significantly, they oft
 ### Architecture
 
 <p align="center">
-    <img src="imgs/next-gpt.png" alt="VITRON Architecture" width="600" height="350">
+    <img src="imgs/next-gpt.png" alt="VITRON Architecture" width="600" height="300">
 </p>
 
 
 
 
-## VITRON: A Unified Pixel-level Vision LLM for Understanding, Generating, Segmenting, Editing
+### VITRON: A Unified Pixel-level Vision LLM for Understanding, Generating, Segmenting, Editing
 
 [Code](https://vitron-llm.github.io/) | [Paper](https://haofei.vip/downloads/papers/Skywork_Vitron_2024.pdf)
 
