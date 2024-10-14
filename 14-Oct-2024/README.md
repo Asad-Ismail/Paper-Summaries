@@ -33,9 +33,16 @@ Most of the ideas below are excellent Subbarao Kambhampati talk at ACL from [Vid
 
 
 
-## LLM Agents overview summary
+## LLM Agents Survey
+
+“An autonomous agent is a system situated within and a
+part of an environment that senses that environment and
+acts on it, over time, in pursuit of its own agenda and so
+as to effect what it senses in the future.”
+**Franklin and Graesser (1997)**
 
 [LLM Agents 2024](https://arxiv.org/pdf/2308.11432) survey and comparison.
+
 
 
 ## Robust Planning with LLM-Modulo Framework: Case Study in Travel Planning  [Paper](https://arxiv.org/pdf/2405.20625)
