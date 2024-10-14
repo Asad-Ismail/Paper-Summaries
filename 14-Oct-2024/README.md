@@ -33,6 +33,11 @@ Most of the ideas below are excellent Subbarao Kambhampati talk at ACL from [Vid
 
 
 
+## LLM Agents overview summary
+
+[LLM Agents 2024](https://arxiv.org/pdf/2308.11432) survey and comparison.
+
+
 ## Robust Planning with LLM-Modulo Framework: Case Study in Travel Planning  [Paper](https://arxiv.org/pdf/2405.20625)
 
 #### Summary:
@@ -42,3 +47,11 @@ Despite advanced agentic methods like CoTs and React LLMs perform poorly on the 
 <p align="center">
     <img src="imgs/LLM-modulo.png" alt="VITRON Architecture" width="600" height="300">
 </p>
+
+
+This work provides various uses of LLMs
+in the planning pipeline such as idea-generators, translators, problem specification enrichment, critic/model acquisition e.t.c
+
+### Prompt Generator
+Prompt Generator Consistent with use of LLMs as agents
+we provide an instruction prompt the LLM along with the context information about flights, hotels etc. We also provide instructions on the output format of the generated plan and present few shot example. This is directly inherited from the implementation of [travelbenchmark](https://arxiv.org/pdf/2402.01622).
