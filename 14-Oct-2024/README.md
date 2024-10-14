@@ -33,5 +33,12 @@ Most of the ideas below are excellent Subbarao Kambhampati talk at ACL from [Vid
 
 
 
-### Robust Planning with LLM-Modulo Framework: Case Study in Travel Planning 
-[Paper](https://arxiv.org/pdf/2405.20625)
+## Robust Planning with LLM-Modulo Framework: Case Study in Travel Planning  [Paper](https://arxiv.org/pdf/2405.20625)
+
+#### Summary:
+
+Despite advanced agentic methods like CoTs and React LLMs perform poorly on the long term planning tasks like travel planning.
+
+<p align="center">
+    <img src="imgs/LLM-modulo.png" alt="VITRON Architecture" width="600" height="300">
+</p>
