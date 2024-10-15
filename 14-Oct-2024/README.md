@@ -49,7 +49,7 @@ as to effect what it senses in the future.”
 
 #### Summary:
 
-Despite advanced agentic methods like CoTs and React LLMs perform poorly on the long term planning tasks like travel planning.
+Despite advanced agentic methods like CoTs and React and Reflexion LLMs perform poorly on the long term planning tasks like travel planning.
 
 <p align="center">
     <img src="imgs/LLM-modulo.png" alt="VITRON Architecture" width="600" height="300">
@@ -61,4 +61,24 @@ in the planning pipeline such as idea-generators, translators, problem specifica
 
 ### Prompt Generator
 Prompt Generator Consistent with use of LLMs as agents
-we provide an instruction prompt the LLM along with the context information about flights, hotels etc. We also provide instructions on the output format of the generated plan and present few shot example. This is directly inherited from the implementation of [travelbenchmark](https://arxiv.org/pdf/2402.01622).
+we provide an instruction prompt the LLM along with the context information about flights, hotels etc. We also provide instructions on the output format of the generated plan and present few shot example. This is directly inherited from the implementation of [travelbenchmark](https://arxiv.org/pdf/2402.01622)
+
+### Plan Backboard and Reformatter
+
+We  then transform the LLM generated natural language travel plan into a valid JSON
+format and store it in the plan blackboard. This translation
+is done through the use of LLM as a reformulator and we
+reuse it for our model based critics which require structured
+parseable plans.
+
+### Crtics
+All of the critics that we use are binary critics paired
+with a backprompt describing the issue should the critic
+detect one. The Format critics ensures the syntactic validity
+of the plan such as validating the JSON and eliminating any
+missing key-values which is a precondition for all other critics, therefore takes precedence. We repurpose the commonsense constraints as style critics that provide information about missing implicit preference considerations and finally use the hard-constraints as the remainder of the critics.
+
+### Metacontroller
+All of the critics evaluate a generated plan
+and incase any of the critics find issues with the generated
+plan the metacontroller takes on the control flow. In this case metacontroller just outputs the concatenated response of all the criticcs along with original prompt. It is simple yet effecitve method another way is to also pass it through prompt generator with few shot examples and some data context.
