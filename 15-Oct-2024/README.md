@@ -71,3 +71,15 @@ consistent, reasonable, and effective manner. Two commonly used memories are
 1. Short Term Memory
 
 2. Long Term Memory
+
+**Unified Memory**
+
+This structure only simulates the human shot-term memory, which is usually
+realized by in-context learning, and the memory information is directly written into the prompts e.g CALYPSO is an agent designed for the game Dungeons & Dragons, which
+can assist Dungeon Masters in the creation and narration of stories. Its short-term memory is built
+upon scene descriptions, monster information, and
+previous summaries. The drawback of short term memory is limitation of context window
+of LLMs, it’s hard to put all memories into prompt,
+which may degrade the performance of agents.This
+method has high requirements on the window length
+of LLMs and the ability to handle long contexts.
