@@ -1,4 +1,7 @@
 ## Agents
+
+Majority of below is from the review [Paper](https://arxiv.org/pdf/2308.11432)
+ 
 ### Definition of an Autonomous Agent
 
 > "An autonomous agent is a system situated within and a part of an environment that senses that environment and acts on it, over time, in pursuit of its own agenda and so as to effect what it senses in the future."
@@ -24,3 +27,24 @@
 ### 4. Reliability and Planning Accuracy
    - **LLMs**: While LLMs are powerful for generating ideas and simulating dialogue, they may lack reliability in decision-making and planning. Their plans can sometimes be entirely wrong or implausible due to their reliance on statistical associations rather than factual correctness. Without an inherent model of the environment or ability to verify actions, LLMs may produce errors, particularly for complex or sequential tasks.
    - **RL Agents**: RL agents are generally more reliable in planning for specific tasks within familiar environments, as they can iteratively refine their strategies based on feedback. However, they may lack flexibility for tasks outside their trained domains, limiting their use in general-purpose planning.
+
+
+We will focus mostly on LLM agents RL agents will follow its seperate series of posts
+
+### Construction of LLM agents
+In order to construct the LLM agensts, there are two significant aspects, that is,
+1. Which architecture should be designed to better
+use LLMs
+2. Give the designed architecture,
+how to enable the agent to acquire capabilities for
+accomplishing specific tasks.
+
+When comparing LLM-based autonomous
+agents to traditional machine learning, designing
+the agent architecture is analogous to determining
+the network structure, while the agent capability
+acquisition is similar to learning the network parameters.
+
+#### Agent Architectures
+
+We need to provide LLMs with different modules to enance their capabilities and act like an agent in an environment below provides 
