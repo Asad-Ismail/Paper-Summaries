@@ -63,3 +63,11 @@ The best practice for now is to get the profile information from real world data
 
 **Memory Module:**
 
+Memory module stores information perceived from the environment and leverages
+the recorded memories to facilitate future actions.
+The memory module can help the agent to accumulate experiences, self-evolve, and behave in a more
+consistent, reasonable, and effective manner. Two commonly used memories are 
+
+1. Short Term Memory
+
+2. Long Term Memory
