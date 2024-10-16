@@ -1,7 +1,7 @@
 ## Agents
 
 Majority of below is from the review [Paper](https://arxiv.org/pdf/2308.11432)
- 
+
 ### Definition of an Autonomous Agent
 
 > "An autonomous agent is a system situated within and a part of an environment that senses that environment and acts on it, over time, in pursuit of its own agenda and so as to effect what it senses in the future."
@@ -47,4 +47,19 @@ acquisition is similar to learning the network parameters.
 
 #### Agent Architectures
 
-We need to provide LLMs with different modules to enance their capabilities and act like an agent in an environment below provides 
+We need to provide LLMs with different "modules" to enance their capabilities and act like an agent in an environment below provides 
+
+**Profiling Module:**
+
+The profiling module aims
+to indicate the profiles of the agent roles, which
+are usually written into the prompt to influence the
+LLM behaviors. Agent profiles typically encompass basic information such as age, gender, and
+career as well as psychology information, reflecting the personalities of the agent, and social
+information, detailing the relationships between
+agents. The choice of information to profile the
+agent is largely determined by the specific application scenarios.
+The best practice for now is to get the profile information from real world dataset like age, gender, personal traits and movie preferences, if it is not available make some handcrafted profiles and use them as few shot examples and then use LLMs for creating any new agent profiles that might be needed
+
+**Memory Module:**
+
