@@ -1,4 +1,9 @@
-## LLM Agents
+## Agents
+### Definition of an Autonomous Agent
+
+> "An autonomous agent is a system situated within and a part of an environment that senses that environment and acts on it, over time, in pursuit of its own agenda and so as to effect what it senses in the future."
+> 
+> — Franklin and Graesser (1997)
 
 ### Reinforcement Learning Vs LLM agents:
 
