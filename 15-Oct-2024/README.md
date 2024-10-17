@@ -1,6 +1,6 @@
 ## Agents
 
-Below is summary with some thoughts from the excellent review paper **A Survey on Large Language Model based Autonomous
+Below is summary with some thoughts/addition on the excellent review paper **A Survey on Large Language Model based Autonomous
 Agents** [Paper](https://arxiv.org/pdf/2308.11432)
 
 ### Definition of an Autonomous Agent
@@ -134,3 +134,8 @@ can improve the consistency of the agent’s behavior.
    It utilizes a key-value list structure. In this structure, the keys are represented by
    embedding vectors, while the values consist of raw
    natural languages.
+
+
+### Memory Operations
+Memory Reading:
+
