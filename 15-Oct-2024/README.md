@@ -3,7 +3,7 @@
 Below is summary with some thoughts/addition on the excellent review paper **A Survey on Large Language Model based Autonomous
 Agents** [Paper](https://arxiv.org/pdf/2308.11432)
 
-### Definition of an Autonomous Agent
+### Autonomous Agent
 
 > "An autonomous agent is a system situated within and a part of an environment that senses that environment and acts on it, over time, in pursuit of its own agenda and so as to effect what it senses in the future."
 > 
@@ -137,5 +137,44 @@ can improve the consistency of the agent’s behavior.
 
 
 ### Memory Operations
-Memory Reading:
+   1. Memory Reading :
+
+      The objective of memory reading is to extract meaningful information
+      from memory to enhance the agent’s actions.  For
+      example, using the previously successful actions
+      to achieve similar goals. The following equation from existing literature for
+      memory information extraction can be derived
+
+      $$
+      m^* = \arg \min_{m \in M} \left( \alpha s_{\text{rec}}(q, m) + \beta s_{\text{rel}}(q, m) + \gamma s_{\text{imp}}(m) \right)
+      $$
+
+      M is the set of all memories.
+      s
+      rec(·), s
+      rel(·) and s
+      imp(·) are the scoring functions for
+      measuring the recency, relevance, and importance. By changign the weights for these scoring metrics we can change
+      how memory is read. These scoring functions can be implemented using different methods for example rel(q, m)
+      by FAISS (Facebook AI Similarity Search)) and so on.
+
+   2. Memory Writing:
+
+      The purpose of memory writing is to store information about the perceived
+      environment in memory. Two important factors to take into consideration.
+      1. How to store relavant/related memories (Memory Duplicated)
+         
+         One proposed method for it is to he successful action sequences related to the same subgoal are stored in a list. Once the size of the list
+         reaches N(=5), all the sequences in it are condensed
+         into a unified plan solution using LLMs. The original sequences in the memory are replaced with the
+         newly generated one
+      2. How to remove information from memory when limit is reached. (Memory Overflow)
+         
+         One proposed methods is to use FIFO when memory has reached limits or let user decide which memory to remove.
+         
+
+
+
+
+   
 
