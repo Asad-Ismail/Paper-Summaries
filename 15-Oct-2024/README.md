@@ -28,7 +28,8 @@ Agents** [Paper](https://arxiv.org/pdf/2308.11432)
    - **RL Agents**: RL agents are generally more reliable in planning for specific tasks within familiar environments, as they can iteratively refine their strategies based on feedback. However, they may lack flexibility for tasks outside their trained domains, limiting their use in general-purpose planning.
 
 
-We will focus mostly on LLM agents RL agents will follow its seperate series of posts
+We will focus mostly on LLM agents RL agents will follow its seperate series of posts. A significant distinction between traditional LLMs
+and the agents is that the latter must possess the capability to learn and complete tasks in dynamic environments
 
 ### Construction of LLM agents
 In order to construct the LLM agensts, there are two significant aspects, that is,
@@ -169,11 +170,16 @@ can improve the consistency of the agent’s behavior.
          into a unified plan solution using LLMs. The original sequences in the memory are replaced with the
          newly generated one
       2. How to remove information from memory when limit is reached. (Memory Overflow)
-         
-         One proposed methods is to use FIFO when memory has reached limits or let user decide which memory to remove.
-         
 
+         We can use FIFO when memory has reached limits or let user decide which memory to remove.
 
+   3. Memory Reflection
+
+      This module gives the agent capability to
+      summarize its past experiences stored in memory
+      into broader and more abstract insights.  e.g In GITM, the actions that successfully accomplish the sub-goals are stored in a list. When the
+      list contains more than five elements, the agent summarizes them into a common and abstract pattern
+      and replaces all the elements. 
 
 
    
