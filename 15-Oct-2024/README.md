@@ -220,8 +220,47 @@ either the breadth-first search (BFS) or depth-first
 search (DFS) strategy. 
 
 <p align="center">
-    <img src="imgs/LLMs_planning.png" alt="VITRON Architecture" width="500" height="270">
+    <img src="imgs/LLMs_planning.png" alt="LLM planning" width="550" height="290">
 </p>
+
+   **External Planners**:
+
+   Despite LLMs ability to peform zero-shot planning, effectively for some tasks they dont guarantee optimal or even correct plan for specific plans. To address this challenge, researchers turn to external planners. These tools are well-developed and employ efficient search algorithms to rapidly identify correct, or even optimal plans. e.g , LLM+P  first transforms
+   the task descriptions into formal Planning Domain
+   Definition Languages (PDDL), and then it uses an
+   external planner to deal with the PDDL. Finally, the
+   generated results are transformed back into natural
+   language by LLMs.
+
+
+2.  Planning with Feedback:
+
+Planning complex dynamic tasks without feedback
+can be less effective due to the following reasons:
+
+1.  Generating a flawless plan directly from the
+beginning is extremely difficult as it needs to consider various complex preconditions. As a result,
+simply following the initial plan often leads to failure. Moreover, the execution of the plan may be
+hindered by unpredictable transition dynamics, rendering the initial plan non-executable. Humans also tackle complex
+tasks, we find that individuals may iteratively make
+and revise their plans based on external feedback. The feedback can be obtained from environments, humans,
+and models.
+
+      **Env Feedback:**
+
+       This is the feedback from the real world or simulation. For instance, it could be the game’s task
+         completion signals or the observations made after
+         the agent takes an action. In specific, ReAct
+         proposes constructing prompts using thought-actobservation triplets. The thought component aims
+         to facilitate high-level reasoning and planning for
+         guiding agent behaviors. The act represents a specific action taken by the agent. The observation
+         corresponds to the outcome of the action, acquired
+         through external feedback, such as search engine
+         results
+
+
+
+
 
 
 
