@@ -131,3 +131,6 @@ can improve the consistency of the agent’s behavior.
    memory can be conveyed in an efficient and concise
    manner. For instance, GITM stores action lists
    for sub-goals in a hierarchical tree structure
+   It utilizes a key-value list structure. In this structure, the keys are represented by
+   embedding vectors, while the values consist of raw
+   natural languages.
