@@ -243,7 +243,7 @@ beginning is extremely difficult as it needs to consider various complex precond
 simply following the initial plan often leads to failure. Moreover, the execution of the plan may be
 hindered by unpredictable transition dynamics, rendering the initial plan non-executable. Humans also tackle complex
 tasks, we find that individuals may iteratively make
-and revise their plans based on external feedback. The feedback can be obtained from environments, humans,
+and revise their plans based on external feedback. The feedback can be obtained from environments, humans (although as famously mentioned by S.K life is too short to be feedback/verifier for LLMs),
 and models.
 
       **Env Feedback:**
@@ -256,8 +256,30 @@ and models.
          guiding agent behaviors. The act represents a specific action taken by the agent. The observation
          corresponds to the outcome of the action, acquired
          through external feedback, such as search engine
-         results
+         results.
 
+      **Human Feedback:**
+
+      In addition to obtaining
+      feedback from the environment, directly interacting with humans is also a very intuitive strategy to
+      enhance the agent planning capability e.g  Inner Monologue
+      collects both environment and human feedback to
+      facilitate the agent plans.
+
+
+      **Model Feedback:**
+
+      Apart from the aforementioned environmental and human feedback, which
+      are external signals, people have also investigated the utilization of internal feedback from the
+      agents themselves. e.g Reflexion is developed
+      to enhance the agent’s planning capability through
+      detailed verbal feedback. In this model, the agent
+      first produces an action based on its memory, and
+      then, the evaluator generates feedback by taking
+      the agent trajectory as input. In contrast to previous studies, where the feedback is given as a scalar
+      value, this model leverages LLMs to provide more
+      detailed verbal feedback, which can provide more
+      comprehensive supports for the agent plans.
 
 
 
