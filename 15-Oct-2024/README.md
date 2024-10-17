@@ -1,6 +1,7 @@
 ## Agents
 
-Majority of below is from the review [Paper](https://arxiv.org/pdf/2308.11432)
+Below is summary with some thoughts from the excellent review paper **A Survey on Large Language Model based Autonomous
+Agents** [Paper](https://arxiv.org/pdf/2308.11432)
 
 ### Definition of an Autonomous Agent
 
@@ -9,8 +10,6 @@ Majority of below is from the review [Paper](https://arxiv.org/pdf/2308.11432)
 > — Franklin and Graesser (1997)
 
 ### Reinforcement Learning Vs LLM agents:
-
-## Comparing Large Language Models (LLMs) and Reinforcement Learning (RL) Agents
 
 ### 1. Learning Paradigms
    - **Reinforcement Learning (RL)**: RL involves learning through direct interaction and feedback from the environment. Agents adjust their strategies based on rewards or penalties, optimizing their actions over time to maximize cumulative rewards. This approach is inherently suited for tasks requiring exploration, adaptation, and continuous improvement within dynamic environments.
@@ -25,7 +24,7 @@ Majority of below is from the review [Paper](https://arxiv.org/pdf/2308.11432)
    - **Domain-Specific Learning in RL**: RL agents typically excel in specialized tasks where they can interact with the environment. However, they may struggle with generalization across different domains without targeted retraining, as they rely heavily on specific reward structures and experiences from their training environments.
 
 ### 4. Reliability and Planning Accuracy
-   - **LLMs**: While LLMs are powerful for generating ideas and simulating dialogue, they may lack reliability in decision-making and planning. Their plans can sometimes be entirely wrong or implausible due to their reliance on statistical associations rather than factual correctness. Without an inherent model of the environment or ability to verify actions, LLMs may produce errors, particularly for complex or sequential tasks.
+   - **LLMs**:  LLMs are powerful for generating ideas and simulating dialogue, they may lack reliability in decision-making and planning. Their plans can sometimes be entirely wrong or implausible due to their reliance on statistical associations rather than factual correctness. Without an inherent model of the environment or ability to verify actions, LLMs may produce errors, particularly for complex or sequential tasks.
    - **RL Agents**: RL agents are generally more reliable in planning for specific tasks within familiar environments, as they can iteratively refine their strategies based on feedback. However, they may lack flexibility for tasks outside their trained domains, limiting their use in general-purpose planning.
 
 
@@ -83,3 +82,52 @@ of LLMs, it’s hard to put all memories into prompt,
 which may degrade the performance of agents.This
 method has high requirements on the window length
 of LLMs and the ability to handle long contexts.
+
+
+**Hybrid Memory**
+
+Hybrid Memory explicitly models the "maybe" human short-term and long-term memories. The short-term memory temporarily buffers recent perceptions, while long-term memory consolidates important information over time. e.g AgentSims  implements a hybrid memory architecture. The information provided in the prompt can be considered as short-term
+In order to enhance the storage capacity of memory, the authors propose a long-term
+memory system that utilizes a vector database, facilitating efficient storage and retrieval. Specifically, the agent’s daily memories are encoded as
+embeddings and stored in the vector database. If
+the agent needs to recall its previous memories, the
+long-term memory system retrieves relevant information using embedding similarities. This process
+can improve the consistency of the agent’s behavior. 
+
+**Memory Formats**
+
+1. Natural Language
+
+   Firstly, the memory information can be expressed
+   in a flexible and understandable manner. Moreover,
+   it retains rich semantic information that can provide
+   comprehensive signals to guide agent behaviors. In
+   the previous work, Reflexion [12] stores experiential feedback in natural language within a sliding
+   window.
+
+2. Embeddings
+
+   Memory data is stored in embeddings vectors, e.g ChatDev
+   encodes dialogue history into vectors for retrieval.
+
+
+
+3. Database
+
+
+   In this format, memory information is stored in databases, allowing the agent
+   to manipulate memories efficiently and comprehensively. For example, ChatDB [40] uses a database as
+   a symbolic memory module. The agent can utilize
+   SQL statements to precisely add, delete, and revise the memory information. In DB-GPT [41], the
+   memory module is constructed based on a database.
+   To more intuitively operate the memory information, the agents are fine-tuned to understand and
+   execute SQL queries, enabling them to interact with
+   databases using natural language directly.
+
+4. Stuctured List
+
+
+   In this format, memory information is organized into lists, and the semantic of
+   memory can be conveyed in an efficient and concise
+   manner. For instance, GITM stores action lists
+   for sub-goals in a hierarchical tree structure
