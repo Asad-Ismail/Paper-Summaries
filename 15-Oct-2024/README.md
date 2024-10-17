@@ -182,5 +182,48 @@ can improve the consistency of the agent’s behavior.
       and replaces all the elements. 
 
 
+
+### Planning Module
+
+   Memory module as responsible for managing the agents’ past behaviors,
+then planning module assist the agents in planning their future
+actions. Planning module essentially divides the complex task in steps and solve these steps.
+**An important insight is LLM might not be planning as in formal planning and cannot generate guarantees like formal solver but most 
+of the tasks can be planned with reasonable solution by dividing them and just learning from internet scale large data.**
+We can divide the planning module into 
+
+1. Planning without feedback:
+
+   Single Path Planning:
+
+   In this approach, agents execute actions without receiving feedback to influence future behaviors. Instead, they follow a predetermined sequence of steps to complete a task.
+   One example of this is Chain of Thought (CoT), where the task is decomposed into intermediate steps that cascade into one another. CoT prompts include reasoning steps as examples, guiding the LLM to plan and act step-by-step.
+   Zero-shot-CoT enables LLMs
+   to generate task reasoning processes by prompting them with trigger sentences like "think step by
+   step". HuggingGPT first decomposes the task into
+   many sub-goals, and then solves each of them based
+   on Huggingface. Different from CoT and Zero-shotCoT, which outcome all the reasoning steps in a
+   one-shot manner, HuggingGPT produce the results by accessing LLMs multiply times.
+
+   Multi Path Planning:
+
+   In this strategy, the
+reasoning steps for generating the final plans are
+organized into a tree-like structure. Each intermediate step may have multiple subsequent steps. This
+approach is analogous to human thinking, as individuals may have multiple choices at each reasoning
+step. e.g. Tree of Thoughts (ToT) 
+is designed to generate plans using a tree-like reasoning structure. In this approach, each node in
+the tree represents a "thought," which corresponds
+to an intermediate reasoning step. The selection
+of these intermediate steps is based on the evaluation of LLMs. The final plan is generated using
+either the breadth-first search (BFS) or depth-first
+search (DFS) strategy. 
+
+<p align="center">
+    <img src="imgs/LLMs_planning.png" alt="VITRON Architecture" width="500" height="270">
+</p>
+
+
+
    
 
