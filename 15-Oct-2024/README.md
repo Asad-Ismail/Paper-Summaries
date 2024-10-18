@@ -282,6 +282,20 @@ and models.
       comprehensive supports for the agent plans.
 
 
+### Action Module
+
+   The action module is responsible for translating
+the agent’s decisions into specific outcomes. This
+module is located at the most downstream position
+and directly interacts with the environment. It is
+influenced by the profile, memory, and planning
+modules. 
+
+#### Actions Goals
+Agents can perform actions with
+various objectives these are actions goals. e.g Task Completion e.g assembling an iron axe in Minecraft or communication with humans or other agents .
+
+
 
 
 
