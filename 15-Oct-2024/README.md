@@ -315,6 +315,21 @@ influenced by its memory
    following, we present several representative tools
    which have been exploited in the literature.
 
+   APIs:
+
+   External APIs are widely used to extend an agent's action space. One prominent example is HuggingGPT, which leverages HuggingFace models to accomplish complex user tasks by utilizing various APIs. This approach allows the system to generate more accurate and diverse responses to user requests.
+
+   Databases & Knowledge Bases:
+
+   Integrating databases or knowledge bases allows agents to access specific domain information. ChatDB is an important example, where agents query databases using SQL to perform actions in a more logical and data-driven manner.
+
+   External Models:
+
+   External models expand the capabilities of agents, often handling complex tasks. e.g MM-REACT integrates various external models, such as VideoBERT for video summarization,
+   X-decoder for image generation, and SpeechBERT
+   for audio processing, enhancing its capability in
+   diverse multimodal scenarios.
+
 
 
 
