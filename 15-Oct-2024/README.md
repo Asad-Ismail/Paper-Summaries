@@ -351,7 +351,41 @@ So far we have focused on agents architectures weather its memories, planning or
 "hardware" of agents. But relying only on hardware might allow to achieve good performance on the task.
 This is because the agent may lack the necessary task-specific
 capabilities, skills and experiences, which can be
-regarded as "software" resources.
+regarded as "software" resources. We can categorize these capability acquisition
+strategies into two classes based on whether they
+require fine-tuning of the LLMs or not.
+
+#### Capability Acquisition with Fine-tuning:
+A straightforward method to enhance the agent capability for task completion is fine-tuning the agent
+based on task-dependent datasets. Generally, the
+datasets can be constructed based on human annotation, LLM generation or collected from real-world
+applications.
+
+1. **Human Annotation:**
+
+   In this method agent is influenced by the dual-process theory of
+   human cognition which is effective for solving
+   complex interactive reasoning tasks. 
+
+2. **Fine-tuning with LLM Generated Datasets:**
+
+   Building human annotated dataset can be costly, especially when one
+   needs to annotate a large amount of samples. Considering that LLMs can achieve human-like capabilities in a wide range of tasks, a natural idea is using
+   LLMs to accomplish the annotation task. While
+   the datasets produced from this method can be not
+   as perfect as the human annotated ones, it is much
+   cheaper, and can be leveraged to generate more samples. For example, in ToolBench [14], to enhance
+   the tool-using capability of open-source LLMs, the
+   authors collect 16,464 real-world APIs spanning
+   49 categories from the RapidAPI Hub. They used
+   these APIs to prompt ChatGPT to generate diverse
+   instructions, covering both single-tool and multitool scenarios. Based on the obtained dataset, the
+   authors fine-tune LLaMA and obtain significant
+   performance improvement in terms of tool using.
+
+3. **Fine-tuning with Real-world Datasets:**
+   
+
 
 
 
