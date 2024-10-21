@@ -49,6 +49,10 @@ acquisition is similar to learning the network parameters.
 
 We need to provide LLMs with different "modules" to enance their capabilities and act like an agent in an environment below provides 
 
+<p align="center">
+    <img src="imgs/Agents_dichotomy.png" alt="LLM planning" width="550" height="290">
+</p>
+
 **Profiling Module:**
 
 The profiling module aims
