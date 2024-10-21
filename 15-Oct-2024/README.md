@@ -386,7 +386,28 @@ applications.
 
 #### Capability Acquisition with Fine-tuning: 
 
-   
+   - **Traditional ML Models**:
+      - Learn by fine-tuning the model parameters.
+
+   - **Large Language Models (LLMs)**:
+      - Learn by fine-tuning model parameters.
+      - Learn by carefully designing input text prompts (prompt engineering).
+      - Can perform in-context learning.
+
+   - **Agents**:
+      - Learn by fine-tuning.
+      - Learn through prompt engineering.
+      - Learn by designing agent evolution mechanisms (sometimes called mechanism engineering).
+
+
+<p align="center">
+    <img src="imgs/Learning-paradigm.png" alt="LLM planning" width="510" height="310">
+</p>
+
+
+#### Mechanism Engineering:
+
+Unlike model finetuning and prompt engineering, mechanism engineering is a unique strategy to enhance agent capability. In the following, we present several representative methods of mechanism engineering.
 
 
 
