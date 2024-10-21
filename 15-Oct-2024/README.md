@@ -334,6 +334,25 @@ influenced by its memory
    for audio processing, enhancing its capability in
    diverse multimodal scenarios.
 
+#### Action Impact
+
+Agent actions and impact environment or change the internal state of the agent itself.
+e.g in GITM and Voyager, the environments are changed by the actions of the agents
+in their task completion process. For example, if the
+agent mines three woods, then they may disappear
+in the environments. Actions taken by the agent can also change the agent
+itself, including updating memories, forming new
+plans, acquiring novel knowledge, and more. For example, in Generative Agents, memory streams
+are updated after performing actions within the system.
+
+
+### Agent Capability acquisition
+So far we have focused on agents architectures weather its memories, planning or actions it can be considered as 
+"hardware" of agents. But relying only on hardware might allow to achieve good performance on the task.
+This is because the agent may lack the necessary task-specific
+capabilities, skills and experiences, which can be
+regarded as "software" resources.
+
 
 
 
