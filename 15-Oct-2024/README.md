@@ -407,7 +407,35 @@ applications.
 
 #### Mechanism Engineering:
 
-Unlike model finetuning and prompt engineering, mechanism engineering is a unique strategy to enhance agent capability. In the following, we present several representative methods of mechanism engineering.
+Unlike model finetuning and prompt engineering, mechanism engineering is a unique strategy to enhance agent capability. Several ways to add capabilities using this method includes:
+
+   - **Trial and Error (Critic analyzing response and giving feedback)**:
+
+      The agent first performs an action, and subsequently, a pre-defined critic is invoked to judge the action. If the action is deemed unsatisfactory, then the agent reacts by incorporating the critic’s feedback. e.g k. In RAH, the agent serves as a user assistant in recommender systems. One of the agent’s crucial roles is to simulate human behavior and generate responses on behalf
+      of the user. To fulfill this objective, the agent first
+      generates a predicted response and then compares
+      it with the real human feedback. If the predicted
+      response and the real human feedback differ, the
+      critic generates failure information, which is subsequently incorporated into the agent’s next action.
+
+   - **Crowd Source**:
+
+      A debating mechanism between agents that leverages the wisdom of crowds to enhance agent capabilities. To begin
+      with, different agents provide separate responses to
+      a given question. If their responses are not consistent, they will be prompted to incorporate the solutions from other agents and provide an updated response. This iterative process continues until reaching a final consensus answer. 
+   
+   - **Experience Accumulation**:
+
+      The agent does not know how to solve a task in the beginning. Then, it makes explorations, and once it has
+      successfully accomplished a task, the actions used
+      in this task are stored into the agent memory. In the
+      future, if the agent encounters a similar task, then
+      the relevant memories are extracted to complete the
+      current task. In this process, the improved agent
+      comes from the specially designed memory accumulation and utilization mechanisms
+
+
+
 
 
 
