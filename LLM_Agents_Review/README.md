@@ -355,6 +355,27 @@ regarded as "software" resources. We can categorize these capability acquisition
 strategies into two classes based on whether they
 require fine-tuning of the LLMs or not.
 
+
+#### Capability Acquisition Comparison 
+
+   - **Traditional ML Models**:
+      - Learn by fine-tuning the model parameters.
+
+   - **Large Language Models (LLMs)**:
+      - Learn by fine-tuning model parameters.
+      - Learn by carefully designing input text prompts (prompt engineering).
+      - Can perform in-context learning.
+
+   - **Agents**:
+      - Learn by fine-tuning.
+      - Learn through prompt engineering.
+      - Learn by designing agent evolution mechanisms (sometimes called mechanism engineering).
+
+
+<p align="center">
+    <img src="imgs/Learning-paradigm.png" alt="LLM planning" width="510" height="310">
+</p>
+
 #### Capability Acquisition with Fine-tuning:
 A straightforward method to enhance the agent capability for task completion is fine-tuning the agent
 based on task-dependent datasets. Generally, the
@@ -384,25 +405,22 @@ applications.
    performance improvement in terms of tool using.
 
 
-#### Capability Acquisition with Fine-tuning: 
-
-   - **Traditional ML Models**:
-      - Learn by fine-tuning the model parameters.
-
-   - **Large Language Models (LLMs)**:
-      - Learn by fine-tuning model parameters.
-      - Learn by carefully designing input text prompts (prompt engineering).
-      - Can perform in-context learning.
-
-   - **Agents**:
-      - Learn by fine-tuning.
-      - Learn through prompt engineering.
-      - Learn by designing agent evolution mechanisms (sometimes called mechanism engineering).
+#### Capability Acquisition without Fine Tuning 
 
 
-<p align="center">
-    <img src="imgs/Learning-paradigm.png" alt="LLM planning" width="510" height="310">
-</p>
+#### Prompt Engineering
+
+It involves creating, refining, and experimenting with the wording, structure, and format of prompts to guide the model towards more accurate, useful, or creative responses For example, in
+CoT , in order to empower the agent with the
+capability for complex task reasoning, the authors
+present the intermediate reasoning steps as few-shot
+examples in the prompt. It can
+be used for both open- and closed-source LLMs.
+However, due to the limitation of the input context
+window of LLMs, it cannot incorporate too much
+task information. In addition, the designing spaces
+of the prompts and mechanisms are extremely large,
+which makes it not easy to find optimal solutions.
 
 
 #### Mechanism Engineering:
@@ -418,11 +436,14 @@ Unlike model finetuning and prompt engineering, mechanism engineering is a uniqu
       response and the real human feedback differ, the
       critic generates failure information, which is subsequently incorporated into the agent’s next action.
 
-   - **Crowd Source**:
+   - **Crowd Source/Self Evloution**:
 
       A debating mechanism between agents that leverages the wisdom of crowds to enhance agent capabilities. To begin
       with, different agents provide separate responses to
-      a given question. If their responses are not consistent, they will be prompted to incorporate the solutions from other agents and provide an updated response. This iterative process continues until reaching a final consensus answer. 
+      a given question. If their responses are not consistent, they will be prompted to incorporate the solutions from other agents and provide an updated response. This iterative process continues until reaching a final consensus answer.  In CLMTWA by using a large language model as a teacher and a weaker language
+      model as a student, the teacher can generate and
+      communicate natural language explanations to improve the student’s reasoning skills via theory of
+      mind. The teacher can also personalize its explanations for the student and intervene only when necessary, based on the expected utility of intervention.
    
    - **Experience Accumulation**:
 
@@ -432,17 +453,59 @@ Unlike model finetuning and prompt engineering, mechanism engineering is a uniqu
       future, if the agent encounters a similar task, then
       the relevant memories are extracted to complete the
       current task. In this process, the improved agent
-      comes from the specially designed memory accumulation and utilization mechanisms
+      comes from the specially designed memory accumulation and utilization mechanisms. 
 
 
+### LLM-based Autonomous Agent Evaluation
 
-
-
-
-
-
-
-
-
+#### Subjective Evaluation
+Subjective evaluation measures the agent capabilities based on human judgements .
+It is suitable for the scenarios where there are no
+evaluation datasets or it is very hard to design quantitative metrics, for example, evaluating the agent’s
+intelligence or user-friendliness. Since LLM-based agents are usually designed
+to serve humans. Thus, subjective agent evaluation
+plays a critical role, since it reflects human criterion.
+However, this strategy also faces issues such as high
+costs, inefficiency, and population bias.
    
+   - **Human Annotation**:
+    This evaluation method involves human evaluators directly scoring or ranking the outputs generated by various agents e.g some evaluation metrics] assess model effectiveness by having human participants rate the models on harmlessness, honesty, helpfulness, engagement,
+   and unbiasedness, subsequently comparing these
+   scores across different models
 
+   - **Turing Test**:
+   This evaluation strategy necessitates that human evaluators differentiate between
+outputs produced by agents and those created by humans. If, in a given task, the evaluators cannot separate the agent and human results, it demonstrates
+that the agent can achieve human-like performance
+on this task e.g people have used to conduct experiments on free-form Partisan text, and
+the human evaluators are asked to guess whether
+the responses are from human or LLM-based agent
+
+
+#### Objective Evaluation
+Objective evaluation refers to assessing the capabilities of LLM-based autonomous agents using quantitative metrics that can be compared and
+tracked over time. In contrast to subjective evaluation, objective metrics aim to provide concrete,
+measurable insights into the agent performance. Some objective measures that are defined for the agents tasks can be 
+
+1. **Task Success Metrics**:  
+   These metrics measure the agent's ability to complete tasks and achieve its goals. Common metrics include:
+   - Success Rate
+   - Reward/Score
+   - Coverage
+   - Accuracy  
+   Higher values indicate greater task completion ability.
+
+2. **Human Similarity Metrics**:  
+   These metrics quantify how closely the agent's behavior resembles human behavior. Common metrics include:
+   - Trajectory/Location Accuracy
+   - Dialogue Similarity
+   - Mimicry of Human Responses  
+   Higher values suggest better human-like performance.
+
+3. **Efficiency Metrics**:  
+   These metrics focus on the agent's efficiency, evaluating factors such as:
+   - Length of Planning
+   - Development Cost
+   - Inference Speed
+   - Number of Clarification Dialogues  
+   These metrics help assess how efficiently the agent performs tasks.
