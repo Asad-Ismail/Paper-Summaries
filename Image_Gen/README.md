@@ -59,13 +59,34 @@ Higher values (e.g., 7-15) result in stronger adherence to the prompt, but extre
 A good starting point is to use a β_cfg value between 7 and 10 for typical text-to-image generation tasks.
 
 
-#### 2. Control Net (Adding Conditional Control to Text-to-Image Diffusion Models)
-[Paper](https://arxiv.org/pdf/2302.05543)
+2. #### ControlNet
+[Paper](https://arxiv.org/abs/2302.05543)
+
+ControlNet enables diffusion models to generate images that are not only conditioned on text prompts but also other forms of control inputs such as edge maps, sketches, or semantic masks. This allows for more specific control over the generated images.
 
 
-<p align="center">
-    <img src="imgs/controlnet.png" alt="VITRON Architecture" width="300" height="400">
+1. **ControlNet Architecture**: 
+   - Built upon pre-trained text-to-image diffusion models.
+   - Extends the model by adding new control signals (e.g., edge maps, semantic masks).
+   - Maintains the original model’s text-to-image generation ability while incorporating new input modalities.
+   <p align="center">
+    <img src="imgs/controlnet.png" alt="ControlNet Architecture" width="300" height="400">
 </p>
 
-The zero conv with weights initialized to 0 will still learn as long as the input is non zero see explaning her [Zero Conv](https://github.com/lllyasviel/ControlNet?tab=readme-ov-file)
+
+2. **Zero Convolution Layer**:
+   - A unique feature of ControlNet is the use of a "zero convolution" layer, with weights initialized to 0.
+   - Despite the initial zero weights, the layer learns from non-zero inputs, allowing ControlNet to incorporate new control signals without disrupting the original model. Zero Convolution layer in the ControlNet GitHub repository: [Zero Conv Explanation](https://github.com/lllyasviel/ControlNet?tab=readme-ov-file).
+
+3. **Training Strategy**:
+   - ControlNet is trained in a way that new conditional controls do not override the pre-existing text-to-image generation capabilities.
+   - This ensures a balanced incorporation of new control inputs while retaining the base model’s strengths.
+
+4. **Sudden Convergence**:
+   - The paper observes a phenomenon of **sudden convergence**, where the model demonstrates rapid performance improvement during later stages of training.
+   - This highlights the effectiveness of the zero convolution layer in maintaining equilibrium between new control signals and the original model.
+
+   <p align="center">
+    <img src="imgs/sudden_convergence.png" alt="Sudden Convergence" width="300" height="300">
+</p>
 
