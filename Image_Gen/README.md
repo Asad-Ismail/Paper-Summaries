@@ -13,7 +13,7 @@ into smaller 64 × 64 latent images.
 
 ### Controlled Generation
 
-#### Classifier-Free Guidance (CFG) in Stable Diffusion
+#### 1. Classifier-Free Guidance (CFG) in Stable Diffusion
 
 **Classifier-Free Guidance (CFG)** is a technique that helps diffusion models like Stable Diffusion improve the quality of generated images by controlling the balance between **unconditional** and **conditional** outputs during the denoising process. This allows the model to generate images that follow the guidance (such as a text prompt) while maintaining some flexibility to avoid overfitting the guidance.
 
@@ -27,13 +27,17 @@ Where:
 - **ε_c**: The conditional noise prediction (with the text prompt or guidance).
 - **β_cfg**: The guidance scale, a user-specified parameter that controls how strongly the model should follow the conditional output.
 
-## How CFG Works
+#### How CFG Works
 
 The basic idea is to combine the **unconditional** output and the **conditional** output using the **guidance scale** (β_cfg). By adjusting this guidance scale, you can control how much influence the text prompt (or other conditioning) has on the generated image.
 
 - **When β_cfg = 0**: The model completely ignores the guidance and uses only the unconditional prediction.
 - **When β_cfg = 1**: The model gives equal importance to the unconditional and conditional predictions.
 - **When β_cfg > 1**: The model puts more emphasis on the guidance, making the output more strongly aligned with the prompt. However, setting β_cfg too high may lead to artifacts or unrealistic images.
+
+$$\epsilon_{\text{prd}} = \epsilon_{\text{uc}} + \beta_{\text{cfg}} (\epsilon_{\text{c}} - \epsilon_{\text{uc}})$$
+
+
 In essense
 
 ```python
@@ -55,5 +59,13 @@ Higher values (e.g., 7-15) result in stronger adherence to the prompt, but extre
 A good starting point is to use a β_cfg value between 7 and 10 for typical text-to-image generation tasks.
 
 
-#### Control Net (Adding Conditional Control to Text-to-Image Diffusion Models)
+#### 2. Control Net (Adding Conditional Control to Text-to-Image Diffusion Models)
 [Paper](https://arxiv.org/pdf/2302.05543)
+
+
+<p align="center">
+    <img src="imgs/controlnet.png" alt="VITRON Architecture" width="300" height="400">
+</p>
+
+The zero conv with weights initialized to 0 will still learn as long as the input is non zero see explaning her [Zero Conv](https://github.com/lllyasviel/ControlNet?tab=readme-ov-file)
+
