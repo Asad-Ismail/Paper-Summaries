@@ -1,16 +1,10 @@
 # 2D Virtual Try On
 
-Given a clothing image and a person image, an image based virtual try-on aims to generate a customized image
-that appears natural and accurately reflects the characteristics of the clothing image. Generally virtual tryons consist of two modules
-
-1.  A warping network to learn the semantic correspondence between the clothing and the human body.
-2.  A generator
-that fuses the warped clothing and the person image.
-
-The nature
-of matching clothing and individuals in the virtual try-on
-dataset  makes it challenging to collect data in diverse environments, which in turn leads to limitations
-in the generator’s generative capability
+Image-based virtual try-on can be regarded as a
+conditional image generation task that uses inshop clothing image Ic and person image Ip as
+raw data, and pre-processes the raw data as conditioned information to guide the model for generating try-on images Itry−on = G(Ip, Ic). Three
+key modules are usually involved in image-based
+virtual try-on:
 
 ## StableViton
 
