@@ -85,7 +85,7 @@ Cloth-agnostic person representations are used to preserve body features (like p
 
 
    <p align="center">
-    <img src="imgs/person_agnostic.png" alt="Person Agnostic" width="400" height="250">
+    <img src="imgs/person_agnostic.png" alt="Person Agnostic" width="410" height="250">
 </p>
 
 
@@ -96,7 +96,7 @@ Cloth-agnostic person representations, including RGB images, pose keypoints, sil
  The Try-On Indication module takes the cloth-agnostic person representation and the target clothing information to predict the dressed person’s appearance. It is a rough semantic map or low-quality image where the clothing is roughly aligned to the body, but it lacks detail, sharpness, and realism. It’s more of a guide that gives an idea of where the clothing should be placed. This module usually takes the form of encoder decoder module.
 The Try-On Indication module and the
 Clothing Warping module are closely related and
-affect each other. HR-VTON (Lee et al, 2022)
+affect each other. HR-VTON
 inputs clothing images, clothing Masks and person
 representation P8,13 at the same time, and simultaneously generates warped clothes and person’s
 semantic distribution. The warping path and the
@@ -104,7 +104,7 @@ semantic prediction path can keep communication
 through the Fusion Block.
 
 ### Cloth Warping:
-he Cloth Warping module in a virtual try-on system aims to transform the clothing's spatial distribution to match the person’s body. This is critical for ensuring that the clothing realistically aligns with the person’s pose and shape. Various transformation methods are used for this, including Thin Plate Spline (TPS), Spatial Transformation Network (STN), Flow Net, and Implicit Transformation. 
+The Cloth Warping module in a virtual try-on system aims to transform the clothing's spatial distribution to match the person’s body. This is critical for ensuring that the clothing realistically aligns with the person’s pose and shape. Various transformation methods are used for this, including Thin Plate Spline (TPS), Spatial Transformation Network (STN), Flow Net, and Implicit Transformation. 
 
 #### Thin Plate Spline (TPS):
 
@@ -194,6 +194,48 @@ stn = STN()
 # Apply the STN to the clothing image
 warped_cloth = stn(cloth_img)
 ```
+
+TPS and STN are often used together because they complement each other: STN performs the initial, coarse alignment (rigid transformations), while TPS handles fine, non-linear deformations. This combination results in a more realistic and accurate fit of the clothing on the person’s body e.g see CP-VTON 
+
+
+### Flow Estimation
+
+Flow indicates the offset of pixel or feature before
+and after transformation. Let (ux, uy) denote the
+offset, the value at target position (x, y) can be
+sampled at (x − ux, y − uy) in the original distribution, and the non-integer coordinates are
+interpolated by bilinear interpolation. Flow estimation methods for cloth warping can be classified
+in terms of prediction target such as pixel and
+feature or prediction steps such as single layer or
+multiple layers. e.g Dior Uses a single-layer flownet to warp clothing features, employing a Global Flow Field Estimator (GFFE) for flow map and soft mask predictions
+
+   <p align="center">
+    <img src="imgs/cloth_warp.png" alt="Person Agnostic" width="520" height="370">
+</p>
+
+### Implicit Transformation
+
+Implicit Transformation methods, used in O-VITON, TryOnGAN, e.t.c , achieve clothing alignment to the target body posture without explicit spatial transformations. Instead, they operate in feature space. O-VITON, an early approach, diffuses clothing features directly within the body region in feature space. These methods allow for flexible garment deformation without the constraints of traditional spatial transformations.
+
+In Summary for cloth warpingm TPS transformations have limitations
+in terms of degrees of freedom for deformation.
+In order to achieve more diverse clothing warping results, flow estimation has become a breakthrough in deformation performance. At the cost
+of greater computational overhead, flownet has
+achieved stronger deformation capabilities, and
+its usage is on the rise. Implicit transformation
+methods deform garments in a generative manner, further enhancing the diversity of garment
+deformation but also posing challenges in controlling clothing content. With the development
+of image generation technology under the diffusion framework, implicit transformation methods
+become promising
+
+
+
+
+
+
+   <p align="center">
+    <img src="imgs/tryons_taxonomy.png" alt="Person Agnostic" width="520" height="370">
+</p>
 
 
 ## Case Study StableViton
