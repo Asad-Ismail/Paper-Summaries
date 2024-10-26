@@ -228,6 +228,40 @@ deformation but also posing challenges in controlling clothing content. With the
 of image generation technology under the diffusion framework, implicit transformation methods
 become promising
 
+### TryON Module
+
+Try-On module is the final stage of the try-on
+pipeline, which combines the clothing and person information obtained in the previous modules
+to generate the final try-on image.
+At present, there are two kinds of methods in
+that are widely used
+
+1.  #### Mask Combination: 
+    This generate the final try-on image by blending three elements: the coarse try-on image (`I_coarse`), the warped clothing image (`C`), and a mask (`M`) representing the clothing region on the dressed person.
+
+    $$
+    I = I_{\text{coarse}} \cdot (1 - M) + C \cdot M
+    $$
+
+    where:
+    - `I_coarse`: Coarse try-on image.
+    - `C`: Warped clothing image.
+    - `M`: Mask for the clothing region.
+    This formula overlays the warped clothing `C` only within the masked region of `I_coarse`.
+    
+    **Advantages**
+    - Simplicity and Efficiency: It’s a straightforward and direct approach and does not increase network parameters, making it lightweight and fast.
+    
+    **Disadvantages**
+
+    - Quality Dependence: The quality of the final image (`I`) depends entirely on the accuracy of the clothing warping and the coarse try-on image. Misalignments in either input can lead to visible artifacts in the final output.
+
+    This method is commonly used for its simplicity but requires high-quality warped clothing and coarse images to produce seamless results.
+
+2. ####
+
+
+
 
 
 
