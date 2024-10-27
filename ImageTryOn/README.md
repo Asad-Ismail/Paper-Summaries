@@ -258,18 +258,67 @@ that are widely used
 
     This method is commonly used for its simplicity but requires high-quality warped clothing and coarse images to produce seamless results.
 
-2. ####
+2. #### Generation-Based 
+
+Generation-based methods in virtual try-on leverage generators to create high-quality try-on images, often utilizing U-Net and diffusion-based networks.
+
+-  U-Net Based Generation:
+
+    U-Net is widely used in virtual try-on models, e.g VTNFP (Yu et al., 2019) Uses U-Net to generate both try-on images and a combination mask that refines clothing details in the final output.
+
+- Diffusion-Based Generation:
+
+    Diffusion-based methods enhance try-on quality by progressively refining images from noisy inputs, leveraging models like **Parallel-UNet**. Techniques such as **attention mechanisms** improve detail retention, while **acceleration strategies** and **image editing enhancements** enable faster, high-quality outputs. Common losses include **denoising loss** for clarity and **attention total variation loss** to smooth attention maps, providing realistic clothing alignment with the body.
 
 
 
 
 
+### Loss Functions:
+In addition to **L1**, **perceptual**, and **adversarial losses**, specialized loss functions are used to maintain local detail and realism:
+- **Local Constraints**: Content-preserving loss and editing-localization loss refine clothing details.
+- **Semantic Constraints**: Feature matching and attribute loss improve alignment and texture realism.
+- **Diffusion-Specific Losses**: Denoising loss and attention total variation loss help maintain image quality in diffusion models.
 
-
+These generation-based methods support more refined and high-resolution try-on images through advanced generator designs and targeted loss functions.
 
    <p align="center">
     <img src="imgs/tryons_taxonomy.png" alt="Person Agnostic" width="520" height="370">
 </p>
+
+
+
+
+### Datasets and Evaluation for Virtual Try-On
+
+This section covers key datasets for evaluating virtual try-on systems, with a focus on in-shop, high-resolution, and in-the-wild try-on tasks.
+
+#### "Popular" Datasets:
+- **VITON-HD**: High-resolution dataset (1024x768) with segmentation and pose keypoints.
+- **Deep Fashion**: Large-scale dataset; **In-Shop Clothes Retrieval** subset is commonly used for try-on tasks, featuring multiple poses per model.
+- **MPV**: Multi-pose dataset with images of the same model in varied poses.
+- **Dress Code**: Privacy-focused, featuring upper-, lower-, and full-body clothing, with model images cropped at the nose.
+- **SHHQ**: Full-body dataset with diverse human poses and garment textures.
+- **UPT / ESF**: Provides half- and full-body images for try-on.
+
+#### In-the-Wild Datasets:
+- **StreetTryOn**: Benchmark for virtual try-on in natural settings, with varied clothing and backgrounds.
+- **LH-400K, WPose, WVTON**: Designed for diverse poses, backgrounds, and body sizes, respectively, supporting realistic try-on testing.
+
+These datasets provide a range of controlled and natural environments for evaluating virtual try-on systems across various use cases.
+
+
+
+### Evaluation Metrics
+
+Evaluating virtual try-on models requires metrics sensitive to both realism and semantic coherence between generated and target images.
+
+### Key Metrics:
+- **Inception Score (IS)**: Measures clarity and diversity of generated images based on prediction probabilities from the Inception model. Higher IS indicates better performance, though it may be limited in virtual try-on as it focuses on a fixed class (human images).
+- **Frechet Inception Distance (FID)**: Calculates the similarity between generated and real images by comparing feature distributions. A lower FID value reflects higher similarity and better quality.
+- **LPIPS (Learned Perceptual Image Patch Similarity)**: Assesses perceptual similarity using feature distances from pretrained networks like VGG or AlexNet. Lower LPIPS values indicate closer image similarity.
+- **Semantic Score (CLIP-based)**: Uses CLIP to measure Euclidean distance between generated and ground truth images, capturing high-level semantic similarity. A lower score shows better alignment in semantic content, which is crucial for realistic virtual try-on evaluation.
+- **Human Evaluation**: Uses human parser to separately assess clothing warping and non-try-on areas, ensuring both garment fidelity and preservation of human details in the generated images.
 
 
 ## Case Study StableViton
