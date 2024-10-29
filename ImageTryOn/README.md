@@ -321,6 +321,20 @@ Evaluating virtual try-on models requires metrics sensitive to both realism and 
 - **Human Evaluation**: Uses human parser to separately assess clothing warping and non-try-on areas, ensuring both garment fidelity and preservation of human details in the generated images.
 
 
+### Improvement Focus Areas
+
+1. 𝘗𝘦𝘳𝘧𝘰𝘳𝘮𝘢𝘯𝘤𝘦 𝘪𝘯 𝘵𝘩𝘦 𝘞𝘪𝘭𝘥: Current models still need refinement to handle diverse, real-world settings. New datasets like "Street Try On" offer an opportunity to test adaptability of methods across varied scenarios.
+
+2. 𝘗𝘪𝘱𝘦𝘭𝘪𝘯𝘦 𝘌𝘧𝘧𝘪𝘤𝘪𝘦𝘯𝘤𝘺: Preprocessing steps, including person representation and cloth warping, are computationally intensive, and errors here can cascade through the pipeline. While diffusion models provide improvements, achieving time efficiency remains a key focus for real-time applications.
+
+3. 𝘏𝘢𝘯𝘥𝘭𝘪𝘯𝘨 𝘊𝘰𝘮𝘱𝘭𝘦𝘹 𝘗𝘰𝘴𝘦𝘴 & 𝘖𝘤𝘤𝘭𝘶𝘴𝘪𝘰𝘯𝘴: Managing complex poses with occlusions has also seen significant progress but still has room for improvement. Sometimes, a refiner network is used to eliminate artifacts generated in such scenarios; it would be interesting to see advancements that accomplish this without an additional refiner.
+
+4. 𝘔𝘶𝘭𝘵𝘪𝘮𝘰𝘥𝘢𝘭 𝘊𝘢𝘱𝘢𝘣𝘪𝘭𝘪𝘵𝘪𝘦𝘴: Integrating text inputs alongside images can add flexibility, making virtual try-ons more interactive and tailored to individual preferences
+
+
+
+
+
 ## Case Study StableViton
 
 [Paper](https://arxiv.org/pdf/2312.01725)
