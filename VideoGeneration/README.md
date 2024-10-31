@@ -65,6 +65,7 @@ class Diffusion:
 **Inference**: Can use DDIM for fewer steps (50-250)
 Quality directly correlates with step count
 
+Features:
 Based on thermodynamics (heat equation)
 Gradually converts data to/from noise
 Explicit probability modeling
@@ -114,6 +115,14 @@ class Flow:
 **Inference**: 5-20 steps per stage usually sufficient
 More steps in early stages often beneficial
 
+Features:
+Based on fluid dynamics (velocity fields)
+Direct path through probability space
+Explicit probability modeling
+✅ Faster than diffusion
+✅ More stable than GANs
+✅ Controllable generation
+❌ Less theoretical guarantees than diffusio
 
 
 
