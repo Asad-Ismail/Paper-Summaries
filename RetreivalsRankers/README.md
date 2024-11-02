@@ -141,8 +141,7 @@ class DeepCTScorer:
                     mapping[current_word] = current_indices
                 current_word = token
                 current_indices = [i]
-                
-        # Don't forget last word
+        #for last word
         if current_word:
             mapping[current_word] = current_indices
             
@@ -158,3 +157,9 @@ class DeepCTScorer:
         return np.mean(embeddings, axis=0)
 
 ```
+
+Limitation of DeepCT is tha tto train the linear layer we need to have the ground truth of scores of words, which is hard to define what is the most, second most important word in a document of 5 pages.
+
+### Deep Impact
+
+It’s much easier to define whether a document as a whole is relevant or irrelevant to a query. That’s why the DeepImpact Sparse Neural Retriever authors directly used the relevancy between a query and a document as a training objective
