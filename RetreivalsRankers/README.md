@@ -166,15 +166,43 @@ Limitation of DeepCT is tha tto train the linear layer we need to have the groun
 
 It’s much easier to define whether a document as a whole is relevant or irrelevant to a query. That’s why the DeepImpact Sparse Neural Retriever authors directly used the relevancy between a query and a document as a training objective. DeepImpact Sparse Neural Retriever authors directly used the relevancy between a query and a document as a training objective. They take BERT’s contextualized embeddings of the document’s words, transform them through a simple 2-layer neural network in a single scalar score and sum these scores up for each word overlapping with a query.
 The training objective is to make this score reflect the relevance between the query and the document.
-
-
 The DeepImpact model (like the DeepCT model) takes the first piece BERT produces for a word and discards the rest. However, what can one find searching for “Q” instead of “Qdrant”?
 
 To solve the problems of DeepImpact’s architecture, the Term Independent Likelihood MoDEl (TILDEv2) model generates sparse encodings on a level of BERT’s representations, not on words level. Aside from that, its authors use the identical architecture to the DeepImpact model.
 A single scalar importance score value might not be enough to capture all distinct meanings of a word. Homonyms (pizza, cocktail, flower, and female name “Margherita”) are one of the troublemakers in information retrieval.
 
-COIL:
+**COIL**:
  If one value for the term importance score is insufficient, we could describe the term’s importance in a vector form! Authors of the COntextualized Inverted List (COIL) model based their work on this idea. Instead of squeezing 768-dimensional BERT’s contextualised embeddings into one value, they down-project them (through the similar “relevance” training objective) to 32 dimensions. Moreover, not to miss a detail, they also encode the query terms as vectors.
 
-Universal COntextualized Inverted List (UniCOIL):
+**Universal COntextualized Inverted List (UniCOIL)**:
+
 Made by the authors of COIL as a follow-up, goes back to producing a scalar value as the importance score rather than a vector, leaving unchanged all other COIL design decisions
+
+
+### Vocabulary Mismatch:
+
+The retrieval based on the exact matching, however sophisticated the methods to predict term importance are, we can’t match relevant documents which have no query terms in them. If you’re searching for “pizza” in a book of recipes, you won’t find “Margherita”.
+A way to solve this problem is through the so-called document expansion. Let’s append words which could be in a potential query searching for this document. So, the “Margherita” document becomes “Margherita pizza”. Now, exact matching on “pizza” will work.
+
+There are two types of document expansion that are used in sparse neural retrieval: external (one model is responsible for expansion, another one for retrieval) and internal (all is done by a single model).
+
+### External Document Expansion:
+
+1. External Tools:
+
+
+    - External Document Expansion with docT5query:
+
+        External Document Expansion with docT5querydocT5query is the most used document expansion model. It is based on the Text-to-Text Transfer Transformer (T5) model trained to generate top-k possible queries for which the given document would be an answer. These predicted short queries (up to ~50-60 words) can have repetitions in them, so it also contributes to the frequency of the terms if the term frequency is considered by the retriever.
+
+        The problem with docT5query expansion is a very long inference time, as with any generative model: it can generate only one token per run, and it spends a fair share of resources on it.
+
+    - Term Independent Likelihood MODel (TILDE):
+
+        Term Independent Likelihood MODel (TILDE) is an external expansion method that reduces the passage expansion time compared to docT5query by 98%. It uses the assumption that words in texts are independent of each other (as if we were inserting in our speech words without paying attention to their order), which allows for the parallelisation of document expansion.
+
+        Instead of predicting queries, TILDE predicts the most likely terms to see next after reading a passage’s text (query likelihood paradigm). TILDE takes the probability distribution of all tokens in a BERT vocabulary based on the document’s text and appends top-k of them to the document without repetitions.
+
+    Problems of external document expansion: External document expansion might not be feasible in many production scenarios where there’s not enough time or compute to expand each and every document you want to store in a database and then additionally do all the calculations needed for retrievers. To solve this problem, a generation of models was developed which do everything in one go, expanding documents “internally”.
+
+
