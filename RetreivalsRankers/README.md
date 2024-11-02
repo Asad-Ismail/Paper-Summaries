@@ -165,4 +165,16 @@ Limitation of DeepCT is tha tto train the linear layer we need to have the groun
 ### Deep Impact
 
 It’s much easier to define whether a document as a whole is relevant or irrelevant to a query. That’s why the DeepImpact Sparse Neural Retriever authors directly used the relevancy between a query and a document as a training objective. DeepImpact Sparse Neural Retriever authors directly used the relevancy between a query and a document as a training objective. They take BERT’s contextualized embeddings of the document’s words, transform them through a simple 2-layer neural network in a single scalar score and sum these scores up for each word overlapping with a query.
-The training objective is to make this score reflect the relevance between the query and the document..
+The training objective is to make this score reflect the relevance between the query and the document.
+
+
+The DeepImpact model (like the DeepCT model) takes the first piece BERT produces for a word and discards the rest. However, what can one find searching for “Q” instead of “Qdrant”?
+
+To solve the problems of DeepImpact’s architecture, the Term Independent Likelihood MoDEl (TILDEv2) model generates sparse encodings on a level of BERT’s representations, not on words level. Aside from that, its authors use the identical architecture to the DeepImpact model.
+A single scalar importance score value might not be enough to capture all distinct meanings of a word. Homonyms (pizza, cocktail, flower, and female name “Margherita”) are one of the troublemakers in information retrieval.
+
+COIL:
+ If one value for the term importance score is insufficient, we could describe the term’s importance in a vector form! Authors of the COntextualized Inverted List (COIL) model based their work on this idea. Instead of squeezing 768-dimensional BERT’s contextualised embeddings into one value, they down-project them (through the similar “relevance” training objective) to 32 dimensions. Moreover, not to miss a detail, they also encode the query terms as vectors.
+
+Universal COntextualized Inverted List (UniCOIL):
+Made by the authors of COIL as a follow-up, goes back to producing a scalar value as the importance score rather than a vector, leaving unchanged all other COIL design decisions
