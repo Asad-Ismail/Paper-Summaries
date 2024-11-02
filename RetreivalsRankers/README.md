@@ -2,6 +2,8 @@
 
 Understanding the evolution from keyword-based to semantic search systems.
 
+A great comparison can be found here from Qdrant [Article](https://qdrant.tech/articles/modern-sparse-neural-retrieval/)
+
 ## Lexical Retrieval (BM25-like)
 
 ```python
@@ -162,4 +164,5 @@ Limitation of DeepCT is tha tto train the linear layer we need to have the groun
 
 ### Deep Impact
 
-It’s much easier to define whether a document as a whole is relevant or irrelevant to a query. That’s why the DeepImpact Sparse Neural Retriever authors directly used the relevancy between a query and a document as a training objective
+It’s much easier to define whether a document as a whole is relevant or irrelevant to a query. That’s why the DeepImpact Sparse Neural Retriever authors directly used the relevancy between a query and a document as a training objective. DeepImpact Sparse Neural Retriever authors directly used the relevancy between a query and a document as a training objective. They take BERT’s contextualized embeddings of the document’s words, transform them through a simple 2-layer neural network in a single scalar score and sum these scores up for each word overlapping with a query.
+The training objective is to make this score reflect the relevance between the query and the document..
