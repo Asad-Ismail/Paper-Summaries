@@ -264,3 +264,11 @@ If n is number of documents:
             ...
             """
         }
+    
+### Conclusion
+
+In areas where keyword matching is crucial but BM25 is insufficient for initial retrieval, semantic matching (e.g., synonyms, homonyms) adds significant value. This is especially true in fields such as medicine, academia, law, and e-commerce, where brand names and serial numbers play a critical role. Dense retrievers tend to return many false positives, while sparse neural retrieval helps narrow down these false positives.
+
+Sparse neural retrieval can be a valuable option for scaling, especially when working with large datasets. It leverages exact matching using an inverted index, which can be fast depending on the nature of your data.
+
+If you’re using traditional retrieval systems, sparse neural retrieval is compatible with them and helps bridge the semantic gap.
