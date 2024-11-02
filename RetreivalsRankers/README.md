@@ -205,4 +205,62 @@ There are two types of document expansion that are used in sparse neural retriev
 
     Problems of external document expansion: External document expansion might not be feasible in many production scenarios where there’s not enough time or compute to expand each and every document you want to store in a database and then additionally do all the calculations needed for retrievers. To solve this problem, a generation of models was developed which do everything in one go, expanding documents “internally”.
 
+2. Internal Document Expansion
 
+     **SPARTA**
+    Sparse Transformer Matching (SPARTA) model use BERT’s model and BERT’s vocabulary (around 30,000 tokens). For each token in BERT vocabulary, they find the maximum dot product between it and contextualized tokens in a document and learn a threshold of a considerable (non-zero) effect. Then, at the inference time, the only thing to be done is to sum up all scores of query tokens in that document.
+    Trained on the MS MARCO dataset, many sparse neural retrievers, including SPARTA, show good results on MS MARCO test data, but when it comes to generalisation (working with other data), they could perform worse than BM25.
+
+    The authors of the Sparse Lexical and Expansion Model (SPLADE)] family of models added dense model training tricks to the internal document expansion idea, which made the retrieval quality noticeably better.
+
+    **SPLADE**
+    The SPARTA model is not sparse enough by construction, so authors of the SPLADE family of models introduced explicit sparsity regularisation, preventing the model from producing too many non-zero values.
+    The SPARTA model mostly uses the BERT model as-is, without any additional neural network to capture the specifity of Information Retrieval problem, so SPLADE models introduce a trainable neural network on top of BERT with a specific architecture choice to make it perfectly fit the task.
+    SPLADE family of models, finally, uses knowledge distillation, which is learning from a bigger (and therefore much slower, not-so-fit for production tasks) model how to predict good representations.
+    One of the last versions of the SPLADE family of models is SPLADE++.
+    SPLADE++, opposed to SPARTA model, expands not only documents but also queries at inference time. We’ll demonstrate this in the next section.
+
+
+### Dense Vs Sparse Retrievals
+
+If n is number of documents:
+
+ - Sparse Retrieval: 
+    1. Memory is O(k * n) because:
+    - Only store non-zero values
+    - Each document has ~k unique terms
+    - Don't store the zeros
+
+    2. Search is O(log n) because:
+    - Use inverted index for O(1) term lookup
+    - Posting lists are sorted
+    - Efficient merge operations with heap
+    - Skip pointers for faster traversal
+
+ - Dense Retrieval:
+    - Memory: O(n * v) - full vector for each document
+    - Search: O(n) - must compare with every document
+
+
+    Example:
+        dense_memory = {
+            "structure": "Each document → Dense vector",
+            "size": "n * v",  # Each doc has full vector
+            "example": """
+            Doc1: [0.1, 0.2, 0.3, ..., 0.8]  # v dimensions
+            Doc2: [0.2, 0.5, 0.1, ..., 0.3]  # v dimensions
+            ...
+            DocN: [0.4, 0.1, 0.7, ..., 0.5]  # v dimensions
+            """
+        }
+        
+        # Sparse Retrieval Memory (Inverted Index)
+        sparse_memory = {
+            "structure": "Each term → List of (doc_id, score)",
+            "size": "k * n",  # k terms per doc on average
+            "example": """
+            'apple': [(doc1, 0.8), (doc4, 0.3), ...]
+            'banana': [(doc2, 0.5), (doc7, 0.9), ...]
+            ...
+            """
+        }
