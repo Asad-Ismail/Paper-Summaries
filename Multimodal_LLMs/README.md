@@ -55,6 +55,8 @@ Two kind of aligment
     <img src="imgs/next-gpt-alignement.png" alt="VITRON Architecture" width="600" height="350">
 </p>
 
+Decoding side alignment is essentiatally we minimize the eucledian distance 
+
 
 
 

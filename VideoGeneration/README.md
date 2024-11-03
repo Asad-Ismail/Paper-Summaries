@@ -137,3 +137,10 @@ Autoregressive video generation
 Multiple resolution stages
 Classifier-free guidance for better quality
 Temporal condition handling
+
+
+
+### [LANGUAGE MODEL BEATS DIFFUSION](https://arxiv.org/pdf/2310.05737)
+
+
+

@@ -59,8 +59,7 @@ Higher values (e.g., 7-15) result in stronger adherence to the prompt, but extre
 A good starting point is to use a β_cfg value between 7 and 10 for typical text-to-image generation tasks.
 
 
-2. #### ControlNet
-[Paper](https://arxiv.org/abs/2302.05543)
+2. #### ControlNet [Paper](https://arxiv.org/abs/2302.05543)
 
 ControlNet enables diffusion models to generate images that are not only conditioned on text prompts but also other forms of control inputs such as edge maps, sketches, or semantic masks. This allows for more specific control over the generated images.
 

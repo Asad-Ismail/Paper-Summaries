@@ -103,9 +103,7 @@ class UnifiedVideoPyramidalFlow(nn.Module):
         noise = torch.randn_like(x1)
         
         # End point (equation 9)
-        x_end = F.interpolate(
-            x1, scale_factor=1/2**stage_k, mode='bilinear', align_corners=False
-        )
+        x_end = F.interpolate(x1, scale_factor=1/2**stage_k, mode='bilinear', align_corners=False)
         x_end = ek * x_end + (1 - ek) * noise
         
         # Start point (equation 10)

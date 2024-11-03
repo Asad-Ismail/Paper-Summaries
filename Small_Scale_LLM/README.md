@@ -1,22 +1,15 @@
 ## Why Small scale LLM models
-
-
 #### Advantages of Small Models
-1. Accessibility
-1. **Cost-Effective**: Smaller models require less computational power, reducing the cost of deployment and maintenance.
-2. **Faster Training**: Due to their size, small models can be trained and fine-tuned more quickly.
-3. **Domain-Specific Performance**: Fine-tuning small models on specific domains can yield high performance, often surpassing larger, general-purpose models in accuracy and relevance.
-4. **Enhanced Privacy**: Deploying small models locally ensures that data remains secure and private.
 
-By leveraging small models and PEFT methods, organizations can achieve high performance while maintaining cost-efficiency and data privacy.
+1. **Accessibility**: Smaller models are easier to deploy and use.
+2. **Cost-Effective**: They require less computational power, reducing deployment and maintenance costs.
+3. **Faster Training**: Their smaller size allows for quicker training and fine-tuning.
+4. **Domain-Specific Performance**: Fine-tuning on specific domains can yield high performance, often surpassing larger models in accuracy and relevance.
+5. **Enhanced Privacy**: Deploying small models locally ensures data remains secure and private.
+6. **Optimization (Price per Token)**: Optimizing the cost per token is crucial for efficient model deployment. Fine-tuning smaller models on specific domains can significantly reduce costs while maintaining high performance.
+7. **Model Quality**: Fine-tuned models on specific domains often outperform larger, general-purpose language models (LLMs). Tailoring a model to a particular domain ensures higher accuracy and relevance in responses.
 
-### Optimization (Price per Token)
-
-Optimizing the cost per token is crucial for efficient model deployment. Fine-tuning smaller models on specific domains can significantly reduce costs while maintaining high performance.
-
-### Model Quality
-
-Fine-tuned models on specific domains often outperform larger, general-purpose language models (LLMs). Tailoring a model to a particular domain ensures higher accuracy and relevance in responses.
+By leveraging small models and Parameter-Efficient Fine-Tuning (PEFT) methods, organizations can achieve high performance while maintaining cost-efficiency and data privacy.
 
 ## Fine-Tuning a Small Model
 
