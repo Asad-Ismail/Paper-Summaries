@@ -1,4 +1,5 @@
-## Grounded Language-Image Pre-training (GLIP)
+## Grounded Language-Image Pre-training (GLIP) 
+[paper](https://arxiv.org/pdf/2112.03857)
 
 ### Summary
 
