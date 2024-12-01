@@ -13,5 +13,5 @@ Consider output of a backbone network,ca 3-dimensional tensor with dimensions: l
 ### Architecture
 
 <p align="center">
-    <img src="imgs/dyanamichead.png" alt="Dynamic head Architecture" width="600" height="300">
+    <img src="imgs/dyanamichead.png" alt="Dynamic head Architecture" width="800" height="200">
 </p>
