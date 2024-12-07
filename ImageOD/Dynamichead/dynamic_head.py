@@ -125,6 +125,36 @@ class MultiLevelFusion(nn.Module):
     
 
 
+class ScaleAwareAttention(nn.Module):
+    """Scale-aware attention with weighted mean combination"""
+    def __init__(self, in_channels, out_channels):
+        super().__init__()
+        self.attn_conv = nn.Sequential(
+            nn.AdaptiveAvgPool2d(1),
+            nn.Conv2d(out_channels, 1, 1),
+            nn.ReLU(inplace=True)
+        )
+        
+    def forward(self, features):
+
+        out = {}
+        feature_names = list(features.keys())
+        for name in feature_names:
+
+            features = features[name]
+            attn_fea = []
+            res_fea = []
+            for fea in features:
+                res_fea.append(fea)
+                attn_fea.append(self.AttnConv(fea))
+
+            stacked_feats = torch.stack(res_fea)
+            attn = self.h_sigmoid(torch.stack(attn_fea))
+
+            out[name]=stacked_feats * attn
+        return out
+
+
 
 # Example usage
 if __name__ == "__main__":
