@@ -7,9 +7,8 @@ from typing import Dict, List
 
 
 class Conv(torch.nn.Module):
-    def __init__(self, in_channels, out_channels, stride, kernel_size=3, padding=1):
-        super(Conv, self).__init__()
-    
+    def __init__(self, in_channels, out_channels, stride=1, kernel_size=3, padding=1):
+        super().__init__()
         self.conv = nn.Conv2d(
             in_channels, 
             out_channels, 
@@ -17,8 +16,7 @@ class Conv(torch.nn.Module):
             stride=stride, 
             padding=padding,
             bias=False 
-        )
-        
+        ) 
         # GroupNorm with 16 groups
         self.bn = nn.GroupNorm(num_groups=16, num_channels=out_channels)
 
@@ -27,7 +25,22 @@ class Conv(torch.nn.Module):
         x = self.conv(input.contiguous())
         x = self.bn(x)
         return x
+
+
+class DeformConv(nn.Module):
+    """Deformable convolution module"""
+    def __init__(self, in_channels, out_channels,kernel_size=3, stride=1,padding=1):
+        super().__init__()
+        self.weight = nn.Parameter(torch.empty(out_channels, in_channels, kernel_size, kernel_size))
+        nn.init.kaiming_uniform_(self.weight)
+        self.stride = stride
+        self.padding=padding
+        
+    def forward(self, x, offset, mask):
+        return deform_conv2d(x, offset, self.weight, stride=self.stride, 
+                           padding=self.padding, mask=mask)
     
+
     
 class MultiLevelFusion(nn.Module):
     """
@@ -52,12 +65,9 @@ class MultiLevelFusion(nn.Module):
         else:
             self.channel_maps = None
         
-        self.next_conv = conv_func(out_channels, out_channels, kernel_size=3, 
-                                 stride=1, padding=1)
-        self.curr_conv = conv_func(out_channels, out_channels, kernel_size=3, 
-                                 stride=1, padding=1)
-        self.prev_conv = conv_func(out_channels, out_channels, kernel_size=3, 
-                                 stride=2, padding=1)
+        self.next_conv = conv_func(out_channels, out_channels)
+        self.curr_conv = conv_func(out_channels, out_channels)
+        self.prev_conv = conv_func(out_channels, out_channels)
         
         
     def _process_level(self, 
@@ -120,10 +130,9 @@ class MultiLevelFusion(nn.Module):
         output = {}
         for level_name in features.keys():
             output[level_name] = self._process_level(features, aligned_features, level_name, conv_args)
-            
+  
         return output
     
-
 
 class ScaleAwareAttention(nn.Module):
     """Scale-aware attention with weighted mean combination"""
