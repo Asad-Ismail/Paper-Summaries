@@ -7,19 +7,19 @@ from typing import Dict, List
 
 
 class Conv(torch.nn.Module):
-    def __init__(self, in_channels, out_channels, stride):
+    def __init__(self, in_channels, out_channels, stride, kernel_size=3, padding=1):
         super(Conv, self).__init__()
     
         self.conv = nn.Conv2d(
             in_channels, 
             out_channels, 
-            kernel_size=3, 
+            kernel_size=kernel_size, 
             stride=stride, 
-            padding=1,
+            padding=padding,
             bias=False 
         )
         
-        # Same GroupNorm as original
+        # GroupNorm with 16 groups
         self.bn = nn.GroupNorm(num_groups=16, num_channels=out_channels)
 
     def forward(self, input, **kwargs):
@@ -29,7 +29,6 @@ class Conv(torch.nn.Module):
         return x
     
     
-
 class MultiLevelFusion(nn.Module):
     """
     Handles multi-level feature fusion with channel alignment, upsampling and downsampling
@@ -103,6 +102,10 @@ class MultiLevelFusion(nn.Module):
             features: Dictionary mapping level names to features
                      e.g., {'p3': tensor_p3, 'p4': tensor_p4, 'p5': tensor_p5}
             conv_args: Optional arguments for convolution
+
+        Returns:
+           freatures: Dictonary with each vlaue contaiing list of featues of tensor 
+           current leve, one level below and one level above. 
         """
         if conv_args is None:
             conv_args = {}
@@ -119,6 +122,9 @@ class MultiLevelFusion(nn.Module):
             output[level_name] = self._process_level(features, aligned_features, level_name, conv_args)
             
         return output
+    
+
+
 
 # Example usage
 if __name__ == "__main__":
