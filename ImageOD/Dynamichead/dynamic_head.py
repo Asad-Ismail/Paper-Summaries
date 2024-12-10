@@ -136,7 +136,7 @@ class MultiLevelFusion(nn.Module):
 
 class ScaleAwareAttention(nn.Module):
     """Scale-aware attention with weighted mean combination"""
-    def __init__(self, in_channels, out_channels):
+    def __init__(self, out_channels):
         super().__init__()
         self.attn_conv = nn.Sequential(
             nn.AdaptiveAvgPool2d(1),
@@ -187,10 +187,8 @@ class SpatialAwareAttention(nn.Module):
             offset = offset_mask[:, :18]
             mask = offset_mask[:, 18:].sigmoid()
             conv_args = {"offset": offset, "mask": mask}
-            
             # Collect features from different levels
             sp_feat = [self.deform_conv(feature, **conv_args) for feature in features ]
-            
             # Aggregate features using mean along level
             outputs[name] = torch.stack(sp_feat).mean(dim=0)
             
@@ -198,7 +196,7 @@ class SpatialAwareAttention(nn.Module):
 
 
 
-class DYReLU(nn.Module):
+class TaskAwareAttention(nn.Module):
     """Task-aware attention implementation with dynamic ReLU"""
 
     def __init__(self, channels, lambda_a=1.0, init_a=[1.0, 0.0], init_b=[0.0, 0.0]):
@@ -274,20 +272,21 @@ if __name__ == "__main__":
         'p5': 1024
     }
     out_channels = 256
-    
-    # Create fusion module
-    fusion = MultiLevelFusion(Conv,out_channels=out_channels,in_channels=in_channels_dict)
-    
-    # Process features
-    output = fusion(features)
-    
+
     # Print shapes
     print("Input shapes:")
     for k, v in features.items():
         print(f"{k}: {v.shape}")
-        
+    
+    # Create fusion module
+    fusion = MultiLevelFusion(Conv,out_channels=out_channels,in_channels=in_channels_dict)
+    scale_atten=ScaleAwareAttention(out_channels=out_channels)
+    # Process features
+    features = fusion(features)
+    #
+    
     print("\nOutput shapes:")
-    for k, v in output.items():
+    for k, v in features.items():
         print(f"{k}: {[f.shape for f in v]}")
 
 
