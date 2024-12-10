@@ -241,11 +241,11 @@ class TaskAwareAttention(nn.Module):
         
         # Reshape parameters for broadcasting
         a1 = a1.view(B, C, 1, 1)
-        a2 = a2.view(B * L, C, 1, 1)
-        b1 = b1.view(B * L, C, 1, 1)
-        b2 = b2.view(B * L, C, 1, 1)
+        a2 = a2.view(B , C, 1, 1)
+        b1 = b1.view(B , C, 1, 1)
+        b2 = b2.view(B , C, 1, 1)
         
-        # Apply formula
+        # Apply euqation 5 of paper
         out1 = x * a1 + b1
         out2 = x * a2 + b2
         out = torch.maximum(out1, out2)
@@ -281,8 +281,13 @@ if __name__ == "__main__":
     # Create fusion module
     fusion = MultiLevelFusion(Conv,out_channels=out_channels,in_channels=in_channels_dict)
     scale_atten=ScaleAwareAttention(out_channels=out_channels)
+    spatial_atten=SpatialAwareAttention(channels=out_channels,kernel_sz=3)
+    task_atten=TaskAwareAttention(channels=out_channels)
     # Process features
     features = fusion(features)
+    features = spatial_atten(features)
+    features = scale_atten(features)
+    features = task_atten(features['p3'])
     #
     
     print("\nOutput shapes:")
