@@ -130,7 +130,7 @@ class DyHead(nn.Module):
     
 
 batch_size=2
-in_channels = [256, 256, 256]
+in_channels = [256, 256, ]
 out_channels = 256
 
 # Multi-scale features

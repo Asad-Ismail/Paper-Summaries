@@ -165,6 +165,98 @@ class ScaleAwareAttention(nn.Module):
 
 
 
+class SpatialAwareAttention(nn.Module):
+    """Spatial-aware attention with multi-level feature aggregation"""
+    def __init__(self, channels,kernel_sz):
+        super().__init__()
+        self.deform_conv = DeformConv(channels, channels)
+        ## offests for deformable cons are k*k*2(x+y offers) + masks (k*k)
+        out_offs=kernel_sz*kernel_sz*2+kernel_sz*kernel_sz
+        self.offset = nn.Conv2d(channels,out_offs , 3, padding=1) 
+        
+    def forward(self, features_dict):
+        outputs = {}
+        feature_names = list(features_dict.keys())
+        
+        for level,name in enumerate(feature_names):
+
+            features = features_dict[name]
+            # Generate offset and mask from the current feature which is always the first one
+            mid_feature = features[0]
+            offset_mask = self.offset(mid_feature)
+            offset = offset_mask[:, :18]
+            mask = offset_mask[:, 18:].sigmoid()
+            conv_args = {"offset": offset, "mask": mask}
+            
+            # Collect features from different levels
+            sp_feat = [self.deform_conv(feature, **conv_args) for feature in features ]
+            
+            # Aggregate features using mean along level
+            outputs[name] = torch.stack(sp_feat).mean(dim=0)
+            
+        return outputs
+
+
+
+class DYReLU(nn.Module):
+    """Task-aware attention implementation with dynamic ReLU"""
+
+    def __init__(self, channels, lambda_a=1.0, init_a=[1.0, 0.0], init_b=[0.0, 0.0]):
+        super().__init__()
+        self.channels = channels
+        self.lambda_a = lambda_a * 2  # Scale factor for α values
+        self.init_a = init_a
+        self.init_b = init_b
+        
+        # Global pooling
+        self.avg_pool = nn.AdaptiveAvgPool2d(1)
+        
+        # θ function implementation
+        self.fc = nn.Sequential(
+            nn.Linear(channels, channels),
+            nn.ReLU(inplace=True),
+            nn.Linear(channels, 4 * channels),  # [α1, α2, β1, β2]
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        """
+        Args:
+            x: Features [B, C, H, W]
+        """
+        B, C, H, W = x.shape
+        
+        # Global average pooling
+        pooled = self.avg_pool(x).view(B, C)
+        
+        # Generate modulation parameters through θ
+        params = self.fc(pooled).view(B, 4, C)
+        
+        # Split parameters
+        a1, a2, b1, b2 = params[:, 0], params[:, 1], params[:, 2], params[:, 3]
+        
+        # Scale(between [-1,1] ) and shift (add bias) parameters exactly as in official implementation
+        a1 = (a1 - 0.5) * self.lambda_a + self.init_a[0]
+        a2 = (a2 - 0.5) * self.lambda_a + self.init_a[1]
+        b1 = b1 - 0.5 + self.init_b[0]
+        b2 = b2 - 0.5 + self.init_b[1]
+        
+        # Reshape parameters for broadcasting
+        a1 = a1.view(B, C, 1, 1)
+        a2 = a2.view(B * L, C, 1, 1)
+        b1 = b1.view(B * L, C, 1, 1)
+        b2 = b2.view(B * L, C, 1, 1)
+        
+        # Apply formula
+        out1 = x * a1 + b1
+        out2 = x * a2 + b2
+        out = torch.maximum(out1, out2)
+        
+        # Reshape back to original dimensions
+        return out.view(B, C, H, W)
+
+
+
 # Example usage
 if __name__ == "__main__":
     # Create dummy features with different channels
