@@ -21,3 +21,35 @@ Details of dynamic head pipeline
 <p align="center">
     <img src="imgs/dynamichead_pipeline.png" alt="Dynamic head Architecture" width="800" height="200">
 </p>
+
+### Equations to Implement
+
+We are implementing this main equation for the paper
+<p align="center">
+    <img src="imgs/complete_eq.png" alt="Dynamic head Architecture" width="400" height="100">
+</p>
+
+where 
+
+**Scale Attention (πL)** :
+
+<p align="center">
+    <img src="imgs/scale_eq.png" alt="Dynamic head Architecture" width="300" height="150">
+</p>
+
+
+**Spatial Attention (πS)** :
+
+<p align="center">
+    <img src="imgs/scale_eq.png" alt="Dynamic head Architecture" width="300" height="150">
+</p>
+
+
+**Task Attention (πS)** :
+
+<p align="center">
+    <img src="imgs/task_eq.png" alt="Dynamic head Architecture" width="300" height="150">
+</p>
+
+
+
