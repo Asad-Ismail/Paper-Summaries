@@ -88,13 +88,13 @@ class MultiLevelFusion(nn.Module):
         # 1. Current level feature
         level_features.append(self.curr_conv(curr_feat, **conv_args))
         
-        # 2. Previous level feature (if exists)
+        # 2. Previous level feature (if exists downsample using conv layer)
         if level_idx > 0:
             prev_name = feature_names[level_idx - 1]
             prev_feat = aligned_features[prev_name]  
             level_features.append(self.prev_conv(prev_feat, **conv_args))
             
-        # 3. Next level feature (if exists)
+        # 3. Next level feature (if exists upsample using interpolation)
         if level_idx < len(features) - 1:
             next_name = feature_names[level_idx + 1]
             next_feat = aligned_features[next_name] 
@@ -236,7 +236,7 @@ class TaskAwareAttention(nn.Module):
             a1, a2 = a1.view(B, C, 1, 1), a2.view(B, C, 1, 1)
             b1, b2 = b1.view(B, C, 1, 1), b2.view(B, C, 1, 1)
 
-            # Apply euqation 5 of paper
+            # Apply equation 5 of paper
             out1 = feature * a1 + b1
             out2 = feature * a2 + b2
             output[name] = torch.maximum(out1, out2)
@@ -291,27 +291,19 @@ if __name__ == "__main__":
     }
     out_channels = 256
 
+    dynamic_head = DynamicHead(in_channels_dict, out_channels)
+    
+    # Process features
+    outputs = dynamic_head(features)
+    
     # Print shapes
     print("Input shapes:")
     for k, v in features.items():
         print(f"{k}: {v.shape}")
     
-    # Create fusion module
-    fusion = MultiLevelFusion(Conv,out_channels=out_channels,in_channels=in_channels_dict)
-    scale_atten=ScaleAwareAttention(out_channels=out_channels)
-    spatial_atten=SpatialAwareAttention(channels=out_channels,kernel_sz=3)
-    task_atten=TaskAwareAttention(channels=out_channels)
-    # Process features
-    features = fusion(features)
-    features = scale_atten(features)
-    features = spatial_atten(features)
-    features = task_atten(features['p3'])
-    #
-    
     print("\nOutput shapes:")
-    for k, v in features.items():
-        print(f"{k}: {[f.shape for f in v]}")
-
+    for k, v in outputs.items():
+        print(f"{k}: {v.shape}")
 
 
 #backbone = timm.create_model("resnet50", pretrained=False, features_only=True)
