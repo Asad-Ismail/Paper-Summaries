@@ -67,7 +67,8 @@ class MultiLevelFusion(nn.Module):
         
         self.next_conv = conv_func(out_channels, out_channels)
         self.curr_conv = conv_func(out_channels, out_channels)
-        self.prev_conv = conv_func(out_channels, out_channels)
+        ## previouse level conv is used for downsampling
+        self.prev_conv = conv_func(out_channels, out_channels, stride=2)
         
         
     def _process_level(self, 
@@ -138,26 +139,30 @@ class ScaleAwareAttention(nn.Module):
     """Scale-aware attention with weighted mean combination"""
     def __init__(self, out_channels):
         super().__init__()
-        self.attn_conv = nn.Sequential(
+        self.AttnConv = nn.Sequential(
             nn.AdaptiveAvgPool2d(1),
             nn.Conv2d(out_channels, 1, 1),
             nn.ReLU(inplace=True)
         )
+
+    def h_sigmoid(self, x):
+        return torch.clamp((x + 1) / 2, 0, 1)
         
-    def forward(self, features):
+    def forward(self, x:dict) -> dict:
 
         out = {}
-        feature_names = list(features.keys())
+        feature_names = list(x.keys())
         for name in feature_names:
 
-            features = features[name]
+            features = x[name]
             attn_fea = []
             res_fea = []
             for fea in features:
                 res_fea.append(fea)
                 attn_fea.append(self.AttnConv(fea))
-
+            # stacked features [num_levels, B, C, H, W]
             stacked_feats = torch.stack(res_fea)
+            # attention weights [num_levels, B, 1, 1]
             attn = self.h_sigmoid(torch.stack(attn_fea))
 
             out[name]=stacked_feats * attn
@@ -178,7 +183,7 @@ class SpatialAwareAttention(nn.Module):
         outputs = {}
         feature_names = list(features_dict.keys())
         
-        for level,name in enumerate(feature_names):
+        for _,name in enumerate(feature_names):
 
             features = features_dict[name]
             # Generate offset and mask from the current feature which is always the first one
@@ -195,63 +200,76 @@ class SpatialAwareAttention(nn.Module):
         return outputs
 
 
-
 class TaskAwareAttention(nn.Module):
-    """Task-aware attention implementation with dynamic ReLU"""
-
     def __init__(self, channels, lambda_a=1.0, init_a=[1.0, 0.0], init_b=[0.0, 0.0]):
         super().__init__()
         self.channels = channels
-        self.lambda_a = lambda_a * 2  # Scale factor for α values
+        self.lambda_a = lambda_a * 2
         self.init_a = init_a
         self.init_b = init_b
-        
-        # Global pooling
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
-        
-        # θ function implementation
         self.fc = nn.Sequential(
             nn.Linear(channels, channels),
             nn.ReLU(inplace=True),
-            nn.Linear(channels, 4 * channels),  # [α1, α2, β1, β2]
+            nn.Linear(channels, 4 * channels),
             nn.Sigmoid()
         )
 
-    def forward(self, x):
-        """
-        Args:
-            x: Features [B, C, H, W]
-        """
-        B, C, H, W = x.shape
+    def forward(self, x: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+        """Modified to handle dictionary input/output"""
+        output = {}
+        for name, feature in x.items():
+            B, C, H, W = feature.shape
+            pooled = self.avg_pool(feature).view(B, C)
+            #Generate modulation parameters through θ
+            params = self.fc(pooled).view(B, 4, C)
+            
+            a1, a2, b1, b2 = params[:, 0], params[:, 1], params[:, 2], params[:, 3]
+
+            # Scale(between [-1,1] ) and shift (add bias) parameters as in paper
+            
+            a1 = (a1 - 0.5) * self.lambda_a + self.init_a[0]
+            a2 = (a2 - 0.5) * self.lambda_a + self.init_a[1]
+            b1 = b1 - 0.5 + self.init_b[0]
+            b2 = b2 - 0.5 + self.init_b[1]
+            
+            a1, a2 = a1.view(B, C, 1, 1), a2.view(B, C, 1, 1)
+            b1, b2 = b1.view(B, C, 1, 1), b2.view(B, C, 1, 1)
+
+            # Apply euqation 5 of paper
+            out1 = feature * a1 + b1
+            out2 = feature * a2 + b2
+            output[name] = torch.maximum(out1, out2)
+            
+        return output
+
+
+class DynamicHead(nn.Module):
+    def __init__(self, in_channels_dict: Dict[str, int], out_channels: int):
+        super().__init__()
+        self.fusion = MultiLevelFusion(
+            Conv, 
+            out_channels=out_channels, 
+            in_channels=in_channels_dict
+        )
+        self.scale_attention = ScaleAwareAttention(out_channels)
+        self.spatial_attention = SpatialAwareAttention(channels=out_channels, kernel_sz=3)
+        self.task_attention = TaskAwareAttention(channels=out_channels)
         
-        # Global average pooling
-        pooled = self.avg_pool(x).view(B, C)
+    def forward(self, features: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+        """Simply process through each attention module in sequence"""
+        output = {}
         
-        # Generate modulation parameters through θ
-        params = self.fc(pooled).view(B, 4, C)
-        
-        # Split parameters
-        a1, a2, b1, b2 = params[:, 0], params[:, 1], params[:, 2], params[:, 3]
-        
-        # Scale(between [-1,1] ) and shift (add bias) parameters exactly as in official implementation
-        a1 = (a1 - 0.5) * self.lambda_a + self.init_a[0]
-        a2 = (a2 - 0.5) * self.lambda_a + self.init_a[1]
-        b1 = b1 - 0.5 + self.init_b[0]
-        b2 = b2 - 0.5 + self.init_b[1]
-        
-        # Reshape parameters for broadcasting
-        a1 = a1.view(B, C, 1, 1)
-        a2 = a2.view(B , C, 1, 1)
-        b1 = b1.view(B , C, 1, 1)
-        b2 = b2.view(B , C, 1, 1)
-        
-        # Apply euqation 5 of paper
-        out1 = x * a1 + b1
-        out2 = x * a2 + b2
-        out = torch.maximum(out1, out2)
-        
-        # Reshape back to original dimensions
-        return out.view(B, C, H, W)
+        # Process through Dynamic head pipeline
+        # fusion model is used to align the channels of different levels and reduce them to a common size. This is not a seperately mentioned in the paper
+        # paper but the line "learned from the input feature from the median level of FPN"
+        # in the paper suggests that the channels are aligned and reduced to a common size.
+        x = self.fusion(features)          
+        x = self.scale_attention(x)       
+        x = self.spatial_attention(x)      
+        output = self.task_attention(x)
+            
+        return output
 
 
 
@@ -285,8 +303,8 @@ if __name__ == "__main__":
     task_atten=TaskAwareAttention(channels=out_channels)
     # Process features
     features = fusion(features)
-    features = spatial_atten(features)
     features = scale_atten(features)
+    features = spatial_atten(features)
     features = task_atten(features['p3'])
     #
     
