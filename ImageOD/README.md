@@ -1,5 +1,9 @@
 
-## Object Detection
+## Image Object Detection
+
+
+
+## Dynamic Head for Object Detection
 
 Dynamic Head: Unifying Object Detection Heads with Attentions  [Paper](https://arxiv.org/pdf/2106.08322)
  
@@ -41,15 +45,15 @@ where
 **Spatial Attention (πS)** :
 
 <p align="center">
-    <img src="imgs/scale_eq.png" alt="Dynamic head Architecture" width="300" height="150">
+    <img src="imgs/scale_eq.png" alt="Dynamic head Architecture" width="300" height="170">
 </p>
 
 
 **Task Attention (πS)** :
 
 <p align="center">
-    <img src="imgs/task_eq.png" alt="Dynamic head Architecture" width="300" height="150">
+    <img src="imgs/task_eq.png" alt="Dynamic head Architecture" width="300" height="170">
 </p>
 
 
-
+Implementaiton: Please see our implemnetaiton of [dynamichead](https://github.com/Asad-Ismail/dynamichead)
