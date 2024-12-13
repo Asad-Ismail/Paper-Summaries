@@ -17,13 +17,13 @@ Consider output of a backbone network,ca 3-dimensional tensor with dimensions: l
 ### Architecture
 
 <p align="center">
-    <img src="imgs/dyanamichead.png" alt="Dynamic head Architecture" width="800" height="200">
+    <img src="imgs/dyanamichead.png" alt="Dynamic head Architecture" width="600" height="200">
 </p>
 
 Details of dynamic head pipeline
 
 <p align="center">
-    <img src="imgs/dynamichead_pipeline.png" alt="Dynamic head Architecture" width="800" height="200">
+    <img src="imgs/dynamichead_pipeline.png" alt="Dynamic head Architecture" width="500" height="200">
 </p>
 
 ### Equations to Implement
