@@ -42,6 +42,40 @@ to score the current step in the beam search. That is, in other words, we can vi
 special case of lookahead search with 𝑘 = 0.
 
 
+## Which problem does search improve:
+
+We find that the efficacy of any given verifier search method depends critically on both the compute
+budget and the question at hand. Specifically, beam-search is more effective on harder questions
+and at lower compute budgets, whereas best-of-N is more effective on easier questions and at higher
+budgets. Moreover, by selecting the best search setting for a given question difficulty and test-time
+compute budget, we can nearly outperform best-of-N using up to 4x less test-time compute.
+
+### Refining the Proposal Distribution Sequentially
+
+This method enables the model to revise their own answers iteratively, allowing the model to dynamically improve it’s own distribution at test time. Simply prompting existing LLMs to correct their own mistakes tends to be
+largely ineffective for obtaining performance improvements on reasoning problems This method incorporate modifications for our setting, and finetune language models to iteratively revise their own answers.
+
+
+### Sequential Vs Parallel Sampling
+
+We might expect sequential and parallel sampling to have different properties. Sampling answers in
+parallel may act as more of a global search process, that could in principle, provide coverage over many
+totally different approaches for solving a problem, for instance, different candidates might utilize different
+high-level approaches altogether. Sequential sampling, on the other hand, may work more as a local
+refinement process, revising responses that are already somewhat on the right track. Due to these
+complementary benefits, we should strike a balance between these two extremes by allocating some of
+our inference-time budget to parallel sampling (e.g. √
+𝑁) and the rest to sequential revisions (e.g. √
+𝑁).
+We will now show the existence of a compute-optimal ratio between sequential and parallel sampling,
+and understand their relative pros and cons based on difficulty of a given prompt.
+
+
+<p align="center">
+    <img src="imgs/sampling_llms.png" alt="Parallel Vs Squentiall sampling" width="600" height="200">
+</p>
+
+
 
 ### References:
 
