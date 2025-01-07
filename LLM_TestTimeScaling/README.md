@@ -13,12 +13,12 @@ There are two main methods to do it durint test time
 
 Different search methods include:
 
-1. **Best-of-N weighted**
+1.**Best-of-N weighted**
 
 We sample N answers independently from the base LLM and then select the best
 answer according to the PRM’s final answer judgement.
 
-2. **Beam search**
+2.**Beam search**
 
 Beam search optimizes the PRM by searching over its per-step predictions.. Concretely, we consider a fixed number of beams 𝑁 and a beam width
 𝑀. We then run the following steps:
@@ -31,7 +31,9 @@ highest scoring steps
 4. Now from each candidate, sample 𝑀 proposals from the next step, resulting in a total of 𝑁/𝑀 × 𝑀
 candidate prefixes again. Then repeat steps 2-4 again
 
-3. **Lookahead search**
+
+3.**Lookahead search**
+
 Lookahead search modifies how beam search evaluates individual steps. It uses
 lookahead rollouts to improve the accuracy of the PRM’s value estimation in each step of the search
 process. Specifically, at each step in the beam search, rather than using the PRM score at the current step
@@ -74,6 +76,14 @@ and understand their relative pros and cons based on difficulty of a given promp
 <p align="center">
     <img src="imgs/sampling_llms.png" alt="Parallel Vs Squentiall sampling" width="600" height="200">
 </p>
+
+Should we use FLOPS on pretraining or test time compute scaling?
+
+Test-time and pretraining compute are not 1-to-1 “exchangeable”. On easy and medium questions,
+which are within a model’s capabilities, or in settings with small inference requirement, test-time
+compute can easily cover up for additional pretraining. However, on challenging questions which
+are outside a given base model’s capabilities or under higher inference requirement, pretraining is
+likely more effective for improving performance.
 
 
 
