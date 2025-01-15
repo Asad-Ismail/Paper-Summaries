@@ -9,8 +9,6 @@
 ## Introduction
 Image-based virtual try-on can be regarded as a conditional image generation task that uses in-shop clothing image `Ic` and person image `Ip` as raw data. The raw data is pre-processed as conditioned information to guide the model for generating try-on images `Itry−on = G(Ip, Ic)`. Three key modules are usually involved in image-based virtual try-on:
 
-This summary is based on the review paper [here](https://arxiv.org/pdf/2311.04811).
-
 ## Key Concepts
 ### Try-On Indication
 This module’s primary function is to create a "prior" about how the clothing should be warped and fused onto the person’s body in the virtual try-on process. 
