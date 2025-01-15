@@ -22,7 +22,6 @@ This repository contains summaries and reviews of various research papers relate
 ## How to Contribute
 If you would like to contribute to this repository, please fork the repository and submit a pull request with your paper summary or review.
 
-
 ## Future Work
 We plan to review and summarize more papers on the following topics:
 - Reinforcement Learning

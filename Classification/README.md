@@ -23,19 +23,17 @@ Classification involves predicting the category or class of a given data point. 
 
 ### Notable Papers
 
-
-  - **"ImageNet Classification with Deep Convolutional Neural Networks"** by Alex Krizhevsky, Ilya Sutskever, Geoffrey E. Hinton
-    - **Summary**: This seminal paper introduced the AlexNet architecture, which significantly improved image classification performance on the ImageNet dataset.
-    - **Link**: [Read the paper](https://dl.acm.org/doi/10.1145/3065386)
+- **"ImageNet Classification with Deep Convolutional Neural Networks"** by Alex Krizhevsky, Ilya Sutskever, Geoffrey E. Hinton
+  - **Summary**: This seminal paper introduced the AlexNet architecture, which significantly improved image classification performance on the ImageNet dataset.
+  - **Link**: [Read the paper](https://dl.acm.org/doi/10.1145/3065386)
   
-  - **"Deep Residual Learning for Image Recognition"** by Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
-    - **Summary**: This paper introduced the ResNet architecture, which uses residual connections to train very deep neural networks effectively.
-    - **Link**: [Read the paper](https://arxiv.org/abs/1512.03385)
+- **"Deep Residual Learning for Image Recognition"** by Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
+  - **Summary**: This paper introduced the ResNet architecture, which uses residual connections to train very deep neural networks effectively.
+  - **Link**: [Read the paper](https://arxiv.org/abs/1512.03385)
   
-  - **"A Survey of Deep Learning for Image Classification"** by Yonghui Li, et al.
-    - **Summary**: This survey paper provides a comprehensive overview of deep learning techniques for image classification.
-    - **Link**: [Read the paper](https://arxiv.org/abs/1801.03505)
-
+- **"A Survey of Deep Learning for Image Classification"** by Yonghui Li, et al.
+  - **Summary**: This survey paper provides a comprehensive overview of deep learning techniques for image classification.
+  - **Link**: [Read the paper](https://arxiv.org/abs/1801.03505)
 
 - **"Deep Anomaly Detection with Outlier Exposure"** by Dan Hendrycks, Mantas Mazeika, Thomas Dietterich
   - **Summary**: This paper introduces a method for improving the performance of anomaly detection models by exposing them to outliers during training.
