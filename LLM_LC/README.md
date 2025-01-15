@@ -44,7 +44,7 @@ Arel i,j = E>xiW>q Wk,EExj + E>xiW>q Wk,RRi-j + u>Wk,EExj + v>Wk,RRi-j.
 where the first term is content-based, the second is a content-dependent positional bias, the third is a global content bias and the fourth is a global positional bias.
 R is a sinusoid encoding matrix, and u and v are trainable parameters.
 
-# Pseudo-code 
+Pseudo-code 
 def relative_positional_encoding(query, key, content_key, position_key, u, v, Ri_minus_j):
     # query: Query vector (E_xi * Wq)
     # key: Content-based key vector (Wk,E * Exj)
@@ -108,13 +108,13 @@ def transformer_layer(hidden_state, memory, Wq, Wk_E, Wv, Wk_R, u, v, R, mask):
 
 
 5. Overall Architecture:
+
 The input is processed through multiple Transformer layers.
 The output of each layer is used as input to the next layer.
 The final output is a hidden representation used for predicting the next token.
 
 
 During evaluation, cached hidden states from previous segments are reused to speed up the process.
-# Pseudo-code 
 
 def transformer_xl_model(input_sequence, segment_length, num_layers, Wq, Wk_E, Wv, Wk_R, u, v, R):
     # input_sequence: Input sequence of tokens
@@ -138,3 +138,122 @@ def transformer_xl_model(input_sequence, segment_length, num_layers, Wq, Wk_E, W
     #Output logits
     logits = linear(output)
     return logits
+
+
+
+## Leave No context behind [Paper](https://arxiv.org/pdf/2404.07143v1)
+
+
+"Leave No Context Behind" paper introduces Infini-attention, a novel attention mechanism that enables Transformer-based Large Language Models (LLMs) to process infinitely long inputs with bounded memory and computation. Infini-attention incorporates a compressive memory into the standard attention mechanism, combining both masked local attention and long-term linear attention within a single Transformer block.
+Here's a breakdown of the key concepts:
+
+Segment-Level Processing: Like Transformer-XL, Infini-Transformer operates on a sequence of input segments.
+
+Local Attention: Within each segment, Infini-attention computes the standard causal dot-product attention. This is similar to the attention mechanism in standard transformers.
+
+Compressive Memory: Instead of discarding old key-value (KV) states like in standard attention, Infini-attention reuses them to maintain the entire context history with a compressive memory.
+
+Memory Update and Retrieval: The model reuses the query (Q), key (K), and value (V) states from the dot-product attention computation. The old KV states are stored in the compressive memory. When processing subsequent sequences, values are retrieved from the memory using the attention query states.
+
+Linear Attention: The memory update and retrieval process is cast as a linear attention mechanism for simplicity and computational efficiency. This involves using an associative matrix to parameterize the memory.
+
+Memory Update Rule: The memory is updated with new KV entries. The update rule can be either Linear or Linear+Delta. Linear update adds new key-value bindings to the memory, while Linear+Delta first retrieves existing value entries and subtracts them from the new values before applying the associative bindings.
+
+Context Aggregation: Infini-attention aggregates the long-term memory-retrieved values and the local attention contexts to compute the final contextual output.
+
+Gating Mechanism: A learned gating scalar determines the trade-off between long-term memory and local information flows.
+
+Bounded Memory: The model has a constant memory complexity, unlike models where memory complexity grows along with the sequence dimension.
+
+
+Pseudo-code :
+function InfiniAttention(X, Ms_prev, zs_prev):
+    // X: Input segment, Ms_prev: Previous memory, zs_prev: Previous normalization term
+    // 1. Compute Q, K, and V (Query, Key, Value) for the current segment
+    K = X * W_K
+    V = X * W_V
+    Q = X * W_Q
+
+    // 2. Local Dot-Product Attention
+    A_dot = softmax(Q * K^T / sqrt(d_model)) * V
+
+    // 3. Compressive Memory Retrieval
+    A_mem =  σ(Q) * Ms_prev / zs_prev    // σ is ELU+1
+
+    // 4. Memory Update using associative binding operator
+    Ms = Ms_prev + σ(K)^T * V  // Linear update
+    //or
+    Ms = Ms_prev + σ(K)^T * (V - A_mem ) // Linear + Delta update
+
+    zs = zs_prev + sum(σ(K))
+
+    // 5. Context Aggregation with a gating scalar
+    β = learnable_parameter // for each attention head
+    A = sigmoid(β) * A_mem + (1 - sigmoid(β)) * A_dot
+
+    // 6. Multi-Head Attention and output projection
+    O =  Concatenate(A_1, ..., A_H) * W_O
+    return O, Ms, zs
+end function
+
+// Initialize memory M_0 and normalization z_0
+M = M_0
+z = z_0
+
+// Process sequence of segments
+for each segment X_s in input_sequence:
+    O_s, M, z = InfiniAttention(X_s, M, z)
+    // O_s is the output for the current segment
+
+
+### Other Intersting Paper Ideas to follow on long context handelling
+
+[Nvidia Ruler](https://github.com/NVIDIA/RULER)
+[LongRope](https://arxiv.org/pdf/2402.13753)
+[LCVsRAG](https://arxiv.org/pdf/2501.01880)
+[CAG](https://github.com/hhhuang/CAG/tree/main)
+[MichelAngelo](https://arxiv.org/html/2409.12640v1)
+
+**ROPE VS LONGROPE:**
+
+
+def rope_encoding(position, dimension, base=10000):
+  """
+  Calculates the RoPE encoding for a given position.
+  """
+  encoding = []
+  for i in range(dimension // 2):
+    theta = base ** (-2 * i / dimension)
+    encoding.append(cos(position * theta))
+    encoding.append(sin(position * theta))
+  return encoding
+
+position = 5
+embedding_dimension = 128
+rope_values = rope_encoding(position, embedding_dimension)
+
+
+
+LongRoPE (Conceptual)
+def longrope_encoding(position, dimension, rescale_factors, start_token_threshold, base=10000):
+  """
+  Calculates the LongRoPE encoding for a given position.
+  """
+  encoding = []
+  for i in range(dimension // 2):
+        theta = base ** (-2 * i / dimension)
+        if position < start_token_threshold:
+            rescale_factor = 1  # No rescaling for initial tokens
+        else:
+            rescale_factor = 1/rescale_factors[i]
+
+        encoding.append(cos(position * theta * rescale_factor ))
+        encoding.append(sin(position * theta * rescale_factor ))
+  return encoding
+
+position = 5
+embedding_dimension = 128
+# rescale_factors is a list of rescale factors obtained through search, one for each dimension
+rescale_factors = [1.0, 1.2, 0.9, ...] # this values are the lambda
+start_token_threshold = 4 # this value is n_hat
+longrope_values = longrope_encoding(position, embedding_dimension, rescale_factors, start_token_threshold )
