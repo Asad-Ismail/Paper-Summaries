@@ -82,3 +82,30 @@ missing key-values which is a precondition for all other critics, therefore take
 All of the critics evaluate a generated plan
 and incase any of the critics find issues with the generated
 plan the metacontroller takes on the control flow. In this case metacontroller just outputs the concatenated response of all the criticcs along with original prompt. It is simple yet effecitve method another way is to also pass it through prompt generator with few shot examples and some data context.
+
+
+### Self Consistency (forward pass)
+([Paper](https://openreview.net/pdf?id=1PL1NIMMrw))
+
+The paper introduces self-consistency, a novel decoding strategy that improves the reasoning performance of large language models using chain-of-thought prompting. Instead of relying on greedy decoding, self-consistency samples multiple diverse reasoning paths and selects the most consistent answer.
+Here's a breakdown of the self-consistency method:
+
+
+**Chain-of-Thought Prompting:** The language model is prompted to generate a series of short sentences mimicking a human's reasoning process to solve a task. For example, when asked, "If there are 3 cars in the parking lot and 2 more cars arrive, how many cars are in the parking lot?" the model is prompted to respond with: "There are 3 cars in the parking lot already. 2 more arrive. Now there are 3 + 2 = 5 cars. The answer is 5."
+
+
+**Diverse Reasoning Paths:** Instead of choosing a single optimal reasoning path (greedy decoding), the model samples multiple diverse reasoning paths. This is based on the idea that complex reasoning problems often have multiple ways of arriving at the correct solution. For instance, in a math question, a model might produce several plausible responses, all reaching the same correct answer.
+
+
+**Marginalization and Aggregation:** The sampled reasoning paths might lead to different final answers. Self-consistency marginalizes out these reasoning paths and aggregates the final answers, selecting the most consistent answer. This is similar to how humans gain confidence in an answer when multiple different lines of thinking lead to the same conclusion. The most consistent answer is determined by a majority vote among the generated answers.
+Here's a code-block that summarizes the self-consistency method, and it would work well in a github readme.
+
+
+**Benefits:**
+
+*   **Improved Accuracy:** Self-consistency significantly boosts performance on arithmetic and commonsense reasoning tasks .
+*   **Unsupervised:** It works with pre-trained language models without extra training or human annotation.
+*   **Robust:** It is robust to different sampling strategies and imperfect prompts
+
+*   **Self-Ensemble:** It acts like a "self-ensemble" within a single language model .
+
