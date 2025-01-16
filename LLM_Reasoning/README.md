@@ -84,6 +84,36 @@ and incase any of the critics find issues with the generated
 plan the metacontroller takes on the control flow. In this case metacontroller just outputs the concatenated response of all the criticcs along with original prompt. It is simple yet effecitve method another way is to also pass it through prompt generator with few shot examples and some data context.
 
 
+### Chain-of-Thought Prompting Elicits Reasoning in Large Language Models
+[Paper Code](https://arxiv.org/pdf/2201.11903)
+
+Chain of thought—a coherent series of intermediate
+reasoning steps that lead to the final answer for a problem. We will show that sufficiently large
+language models can generate chains of thought if demonstrations of chain-of-thought reasoning are
+provided in the exemplars for few-shot prompting.
+
+#### Example of COT Prompting
+**Standard Prompting**:
+
+Q: Roger has 5 tennis balls. He buys 2 more cans of
+tennis balls. Each can has 3 tennis balls. How many
+tennis balls does he have now?
+
+A: The answer is 11.
+
+
+**COT Prompting**:
+
+Q: Roger has 5 tennis balls. He buys 2 more cans of
+tennis balls. Each can has 3 tennis balls. How many
+tennis balls does he have now?
+
+A: Roger started with 5 balls. 2 cans of 3 tennis balls
+each is 6 tennis balls. 5 + 6 = 11. The answer is 11
+
+
+
+
 ### Self Consistency (forward pass)
 ([Paper](https://openreview.net/pdf?id=1PL1NIMMrw))
 
