@@ -109,3 +109,68 @@ Here's a code-block that summarizes the self-consistency method, and it would wo
 
 *   **Self-Ensemble:** It acts like a "self-ensemble" within a single language model .
 
+
+
+### Large Language Models are Better Reasoners with Self-Verification
+[Paper](https://arxiv.org/pdf/2212.09561)
+
+
+Concept: This approach explicitly incorporates a backward verification step to assess the correctness of answers generated through chain-of-thought reasoning.
+
+
+**Mechanism:**
+
+Forward Reasoning: The LLM generates candidate answers using chain-of-thought prompting, similar to self-consistency.
+
+
+Backward Verification:
+
+▪
+The generated answers are treated as part of the conditions for the original problem.
+
+▪
+The model is prompted to re-evaluate the original conditions or other parts of the context based on the proposed answer.
+
+▪
+Verification scores are calculated based on the consistency between the predicted values in this backward verification step and the original values, and the answer with the highest score is chosen.
+
+▪
+Two types of Backward Verification questions:
+
+1. True-False Item Verification (TFV): A general approach that asks the LLM if all the conditions, including the proposed conclusion, are mutually satisfied.
+ 
+ 2. Condition Mask Verification (CMV): Used for arithmetic reasoning, this method masks specific conditions (e.g., numbers) in the original problem and asks the model to predict the masked value.
+
+
+
+**Advantages:**
+
+Improved Accuracy: Self-verification improves the reasoning performance on various arithmetic, commonsense, and logical reasoning datasets.
+
+
+Interpretability: The verification scores offer an interpretable way to assess the model's reliability.
+
+
+No Additional Training: Like self-consistency, this method does not require additional training or human annotation.
+
+
+Combinable: It can be combined with other techniques like self-consistency and Program-Aided Language models (PAL) to further improve performance.
+
+
+Limitations: The effectiveness of self-verification is limited by the accuracy of the candidate answers generated during forward reasoning and may not be suitable for evaluating the LLM's inference procedure.
+Key Differences Between Self-Consistency and Self-Verification
+
+
+Implicit vs. Explicit Verification: Self-consistency uses implicit verification by aggregating diverse reasoning paths and selecting the most consistent answer. Self-verification employs a more explicit backward verification step, where the model re-evaluates conditions in light of its generated answers.
+
+
+Mechanism: Self-consistency focuses on generating diverse reasoning paths and selecting the most consistent answer. Self-verification focuses on generating candidate answers then verifying them with an additional backward step.
+
+
+Scope: Self-consistency is broadly applicable to problems with a fixed answer set, while self-verification uses different approaches depending on the type of reasoning, i.e. TFV for general QA tasks, and CMV for arithmetic reasoning.
+
+
+Interpretability: Self-verification has a clear interpretable score based on the backward verification which enhances the explainability of the prediction.
+
+
+Computational Cost: Both methods increase computation due to sampling multiple paths but self-consistency may be slightly less computationally expensive since self-verification requires an extra reasoning step.
